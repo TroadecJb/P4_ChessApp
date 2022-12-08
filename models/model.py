@@ -23,16 +23,32 @@ class Turnament:
         name_db = db.table(self.name)
         name_db.insert({"nom": self.name, "place": self.place, "date": self.date})
    
-    def create_turnament():
+    def create_turnament(self):
         prompt = input("Souhaitez vous créer un nouveau tournoi ? (y/n)").lower()
         if prompt == "y":
-            turnament_name = input("Entrez le nom du tournoi :\n")
-            turnament_date = input("Entrez la date du tournoi :\n")
-            turnament_place = input("Entrez le lieu du tournoi :\n")
-            turnament = Turnament(turnament_name, turnament_place, turnament_date)
+            self.set_name()
+            self.set_date()
+            self.set_place()
+            self.set_number_rounds()
+            self.set_time_mode()
+            self.add_players_to_turnament()
+            self.generate_rounds()
         else:
             pass
         
+    def set_name(self):
+        turnament_name = input("Entrez le nom du tournoi :\n")
+        self.name = turnament_name
+
+    def set_date(self):
+        turnament_date = input("Entrez la date du tournoi :\n")
+        self.date = str(turnament_date)
+    
+    def set_place(self):
+        turnament_place = input("Entrez le lieu du tournoi :\n")
+        self.place = turnament_place
+
+
     def set_time_mode(self):
         choice = int(input(f"Sélectionner le mode de Contrôle du temps :\n 1 - Bullet\n 2 - Blitz\n 3 - Coup Rapide"))
         if choice is type(int) and choice < 4:
@@ -102,18 +118,27 @@ class Player:
         self.rank = rank
 
     def add_player_playersDb():
-        last_name = input("Indiquez le nom du joueur :\n")
-        first_name = input("Indiquez le prénom du joueur :\n")
-        name = f"{first_name} {last_name}"
-        birth_date = input(f"Indiquez la date de naissance de {name} :\n")
-        gender = input(f"Indiquez le genre de {name} : \n")
-        rank = input(f"Indiquez le classement de {name} :\n")
-        players_db.insert(
-            {
-                "first": first_name,
-                "last name": last_name,
-                "birth date": birth_date,
-                "gender": gender,
-                "rank": rank,
-            }
-        )
+        adding_entry = True
+        while adding_entry: 
+            last_name = input("Indiquez le nom du joueur :\n")
+            first_name = input("Indiquez le prénom du joueur :\n")
+            name = f"{first_name} {last_name}"
+            birth_date = input(f"Indiquez la date de naissance de {name} :\n")
+            gender = input(f"Indiquez le genre de {name} : \n")
+            rank = input(f"Indiquez le classement de {name} :\n")
+            players_db.insert(
+                {
+                    "first": first_name,
+                    "last name": last_name,
+                    "birth date": birth_date,
+                    "gender": gender,
+                    "rank": rank,
+                }
+            )
+            prompt = input("Ajouter un autre joueur à la base de donnée ? (y:n)\n").lower()
+            if prompt != 'y':
+                adding_entry = False
+            else:
+                pass
+    
+    def update_player
