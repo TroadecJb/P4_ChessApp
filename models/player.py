@@ -1,44 +1,56 @@
 from tinydb import TinyDB, Query, where
 
-db = TinyDB("db.json")
-db_players = db.table("players")
+DB = TinyDB("db.json")
+JOUEUR_TABLE = DB.table("joueurs")
+TOURNOI_TABLE = DB.table("tournois")
 
 
-class Player:
+class Joueur:
     """Class for a player"""
 
-    def __init__(self, first_name, last_name, date_birth, gender, rank):
-        self.first_name = first_name
-        self.last_name = last_name
+    def __init__(self):
+        self.first_name = ""
+        self.last_name = ""
+        self.name = ""
+        self.birth_date = ""
+        self.gender = ""
+        self.rank = ""
+        self.points = ""
+        self.serialized = ""
+
+    def __str__(self):
+        return (
+            f"{self.name} est né le {self.birth_date}, a un classement de {self.rank}."
+        )
+
+    def __repr__(self):
+        return f"{self.name}, {self.birth_date}, {self.rank}"
+
+    def update_rank(self):
+        current_rank = self.rank
+        print(f"{self.name}, classement actuel : {current_rank}")
+        prompt = input(f"Mettre à jour le classement de {self.name} ? (y/n)\n").lower()
+        if prompt == "y":
+            new_rank = float(input("Indiquez le nouveau classement de {self.name} :\n"))
+            self.rank = new_rank
+        else:
+            pass
+
+    def serialize(self):
+        self.serialized = {
+            "first name": self.first_name,
+            "last name": self.last_name,
+            "birth date": self.birth_date,
+            "gender": self.gender,
+            "rank": self.rank,
+            "points": self.points,
+        }
+
+    def deserialize(self, player_db):
+        self.first_name = player_db["first_name"]
+        self.last_name = player_db["last_name"]
         self.name = f"{self.first_name} {self.last_name}"
-        self.date_birth = date_birth
-        self.gender = gender
-        self.rank = rank
-
-    def add_player_playersDb():
-        adding_entry = True
-        while adding_entry:
-            last_name = input("Indiquez le nom du joueur :\n")
-            first_name = input("Indiquez le prénom du joueur :\n")
-            name = f"{first_name} {last_name}"
-            birth_date = input(f"Indiquez la date de naissance de {name} :\n")
-            gender = input(f"Indiquez le genre de {name} : \n")
-            rank = input(f"Indiquez le classement de {name} :\n")
-            db_players.table.insert(
-                {
-                    "first": first_name,
-                    "last name": last_name,
-                    "birth date": birth_date,
-                    "gender": gender,
-                    "rank": rank,
-                }
-            )
-            prompt = input(
-                "Ajouter un autre joueur à la base de donnée ? (y:n)\n"
-            ).lower()
-            if prompt != "y":
-                adding_entry = False
-            else:
-                pass
-
-    # def update_player():
+        self.birth_date = player_db["birth_date"]
+        self.gender = player_db["gender"]
+        self.rank = player_db["rank"]
+        self.points = player_db["points"]

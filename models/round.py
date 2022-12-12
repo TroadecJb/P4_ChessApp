@@ -1,11 +1,26 @@
 from tinydb import TinyDB, Query, where
+from datetime import datetime
+from controllers import swiss_system
 
-db = TinyDB("db.json")
+DB = TinyDB("db.json")
+JOUEUR_TABLE = DB.table("joueurs")
+TOURNOI_TABLE = DB.table("tournois")
 
 
-class Round:
+class Tour:
     """Class for a round"""
 
-    def __init__(self, index, matchs_list):
+    def __init__(self, index):
         self.index = index
-        self.matchs_list = matchs_list
+        self.matchs_list = []
+        self.start_time = ""
+        self.end_time = ""
+
+    def set_match(self, list_pairs):
+        """From tuple or list_pairs, generate a match"""
+
+    def start_round(self):
+        self.start_time = datetime.now()
+
+    def end_round(self):
+        self.end_time = datetime.now()
