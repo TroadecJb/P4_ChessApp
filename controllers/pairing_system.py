@@ -27,6 +27,7 @@ class Swiss_system:
         players_number = len(players_list)
         sorted_players = sorted(players_list, key=operator.attrgetter("points", "rank"))
         pairs = []
+
         for idx, player in enumerate(sorted_players[::2]):
             new_pair = (player, sorted_players[idx + 1])
 

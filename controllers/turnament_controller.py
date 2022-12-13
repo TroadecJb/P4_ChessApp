@@ -1,47 +1,10 @@
 from models import tournoi, tour, joueur
 from controllers import pairing_system
 
-pair_sys = pairing_system.Swiss_system()
-
 
 class Tournoi_controller:
-    def run_first_round(tournoi_):
-        """
-        Generate first round for the turnament, with paired players according to pairing system.
-        """
-        index = len(tournoi.matchs_list)
-        first_round = tour.Tour(index)
-        tournoi.rounds_list.append(first_round)
-
-        for player in tournoi.players_list:
-            player.reset_points()
-
-        round_one = tournoi.rounds_list[O]
-        pairs_list = pair_sys.generate_inital_pairs(tournoi.players_list)
-
-        for idx, pair in enumerate(pairs_list):
-            round_one.matchs_list.append(
-                Match(idx, pair)
-            )  # tester si il ne faut pas créer une variable pour l'ajouter à une liste
-
-    def run_round(tournoi_):
-        """
-        Generate next round, if in range of turnament's number of round.
-        Pairs according to pairing system (no pair redundancy).
-        """
-        index = len(tournoi.matchs_list)
-        if index <= tournoi.number_of_rounds:
-            next_round = tour.Tour(index)
-
-            pairs_list = pair_sys.generate_pairs(tournoi.players_list)
-            for idx, pair in enumerate(pairs_list):
-                next_round.matchs_list.append(
-                    Match(idx, pair)
-                )  # tester si il ne faut pas créer une variable pour l'ajouter à une liste
-
-            tournoi.rounds_list.append(next_round)
-        else:
-            pass
+    def __init__(self):
+        self.pair_system = pairing_system.Swiss_system()
 
     def create_turnament():
         prompt = input("Souhaitez vous créer un nouveau tournoi ? (y/n)\n").lower()
@@ -87,5 +50,44 @@ class Tournoi_controller:
                 player = joueur.Joueur()
                 player = player.deserialize()
                 tournoi.players_list.append(player)
+        else:
+            pass
+
+    def generate_first_round(tournoi_):
+        """
+        Generate first round for the turnament, with paired players according to pairing system.
+        """
+        index = len(tournoi_.matchs_list)
+        first_round = tour.Tour(index)
+        tournoi_.rounds_list.append(first_round)
+
+        for player in tournoi.players_list:
+            player.reset_points()
+
+        round_one = tournoi_.rounds_list[O]
+        pairs_list = self.pair_sys.generate_inital_pairs(tournoi_.players_list)
+
+        for idx, pair in enumerate(pairs_list):
+            round_one.matchs_list.append(
+                Match(idx, pair)
+            )  # tester si il ne faut pas créer une variable pour l'ajouter à une liste
+
+    def generate_round(tournoi_):
+        """
+        Generate next round, if in range of turnament's number of round.
+        Pairs according to pairing system (no pair redundancy).
+        """
+        index = len(tournoi_.matchs_list)
+        if index <= tournoi_.number_of_rounds:
+            next_round = tour.Tour(index)
+
+            pairs_list = self.pair_sys.generate_pairs(tournoi_.players_list)
+
+            for idx, pair in enumerate(pairs_list):
+                next_round.matchs_list.append(
+                    Match(idx, pair)
+                )  # tester si il ne faut pas créer une variable pour l'ajouter à une liste
+
+            tournoi_.rounds_list.append(next_round)
         else:
             pass
