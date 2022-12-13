@@ -1,9 +1,5 @@
-from tinydb import TinyDB, Query, where
-
 CHESS_TIME_MODE = ["bullet", "blitz", "coup rapide"]
-DB = TinyDB("db.json")
-JOUEUR_TABLE = DB.table("joueurs")
-TOURNOI_TABLE = DB.table("tournois")
+
 
 class Tournoi:
     """Class for a turnament"""
