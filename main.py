@@ -1,6 +1,6 @@
 from tinydb import TinyDB, Query, where
-from models import turnament, player, round, match
-from controllers import database_controller, swiss_system
+from models import joueur, tournoi, tour, match
+from controllers import database_controller, turnament_controller, swiss_system
 from datetime import datetime
 
 DB = TinyDB("db.json")

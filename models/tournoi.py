@@ -1,28 +1,9 @@
 from tinydb import TinyDB, Query, where
 
+CHESS_TIME_MODE = ["bullet", "blitz", "coup rapide"]
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
-CHESS_TIME_MODE = ["bullet", "blitz", "coup rapide"]
-
-
-def create_turnament():
-    prompt = input("Souhaitez vous créer un nouveau tournoi ? (y/n)").lower()
-    if prompt == "y":
-        new_turnament = Tournoi()
-        new_turnament.set_name()
-        new_turnament.set_date()
-        new_turnament.set_place()
-        new_turnament.set_number_rounds()
-        new_turnament.set_time_mode()
-        new_turnament.add_players_to_turnament()
-        new_turnament.serialize()
-        new_turnament.save()
-        print(f"{new_turnament.name} a été enregistré dans la base de données.")
-        return new_turnament
-    else:
-        pass
-
 
 class Tournoi:
     """Class for a turnament"""
@@ -32,8 +13,9 @@ class Tournoi:
         self.place = ""
         self.date = ""
         self.number_of_rounds = 4
-        self.rounds = []
+        self.rounds_list = []
         self.players_list = []
+        self.matchs_list = []
         self.time_mode = ""
         self.description = ""
         self.index_in_table = ""
@@ -54,7 +36,7 @@ class Tournoi:
         self.name = turnament_name
 
     def set_date(self):
-        turnament_date = input("Entrez la date du tournoi :\n")
+        turnament_date = input("Entrez la date du tournoi (dd/mm/yyyy):\n")
         self.date = str(turnament_date)
 
     def set_place(self):
@@ -93,44 +75,15 @@ class Tournoi:
         else:
             pass
 
-    def add_players_to_turnament(self):
-        potential_player = []
-        selected_player = []
-        adding_player = True
-
-        prompt = input(
-            "Voulez-vous ajouter des joueurs dans ce tournoi ? (y/n)\n"
-        ).lower()
-
-        if prompt == "y":
-            for idx, player in enumerate(JOUEUR_TABLE):
-                name = (player["last_name"], player["first_name"])
-                print(f"{idx + 1} : {name}")
-                potential_player.append(name)
-
-            while adding_player:
-                selection = input(
-                    "Entrez l'index des joueurs participant au tournoi (pour arrêter n'entrez aucun index et validez):\n"
-                )
-                if len(selection) > 0:
-                    selected_player.append(potential_player[int(selection) - 1])
-                else:
-                    adding_player = False
-
-            # Convert player into Class Joueur
-            for player in selected_player:
-                player = Joueur.deserialize()
-                self.players_list.append(player)
-        else:
-            pass
-
     def serialize(self):
         self.serialized = {
             "name": self.name,
             "place": self.place,
             "date": self.date,
             "number_of_round": self.number_of_rounds,
+            "rounds_list": self.rounds_list,
             "players": self.players_list,
+            "matchs_list": self.matchs_list,
             "time_mode": self.time_mode,
             "description": self.description,
         }
@@ -140,9 +93,8 @@ class Tournoi:
         self.place = db["place"]
         self.date = db["date"]
         self.number_of_rounds = db["number_of_round"]
+        self.rounds_list = db["rounds_list"]
         self.players_list = db["players"]
+        self.matchs_list = db["matchs_list"]
         self.time_mode = db["time_mode"]
         self.description = db["description"]
-
-    def save(self):  # vérifier pour une mis à jour d'un tournoi existant
-        TOURNOI_TABLE.insert(self.serialized)

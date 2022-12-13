@@ -1,10 +1,3 @@
-from tinydb import TinyDB, Query, where
-
-DB = TinyDB("db.json")
-JOUEUR_TABLE = DB.table("joueurs")
-TOURNOI_TABLE = DB.table("tournois")
-
-
 class Joueur:
     """Class for a player"""
 
@@ -35,6 +28,13 @@ class Joueur:
             self.rank = new_rank
         else:
             pass
+
+    def reset_points(self):
+        """
+        The points allows to know how to update the rank of the player at the end of the turnament.
+        At the beginning of a turnament, resets the points to 0.
+        """
+        self.points = 0
 
     def serialize(self):
         self.serialized = {

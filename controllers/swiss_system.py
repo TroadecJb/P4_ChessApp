@@ -16,17 +16,27 @@ def generate_inital_pairs(players_list):
     return pairs
 
 
-def generate_pairs(players_list):
+def generate_pairs(players_list, matchs_list):
     """
     Pair the players by the points they made after each round.
     player[n] with player[n+1].
     If same score points, they are paired according to rank.
+    If paired already occured, the next in position is picked
     """
 
     players_number = len(players_list)
     sorted_players = sorted(players_list, key=operator.attrgetter("points", "rank"))
     pairs = []
     for idx, player in enumerate(sorted_players[::2]):
-        pairs.append((player, sorted_players[idx + 1]))
+        new_pair = (player, sorted_players[idx + 1])
+
+        while new_pair in matchs_list:
+            index = idx + 2
+            new_pair = (player, sorted_players[index])
+        else:
+            pass
+
+        sorted_players.remove(new_pair[O], new_pair[1])
+        pairs.append(new_pair)
 
     return pairs
