@@ -18,3 +18,6 @@ class Tour:
 
     def end_round(self):
         self.end_time = datetime.now()
+
+    def show_match(self):
+        pass
