@@ -7,8 +7,8 @@ class Joueur:
         self.name = ""
         self.birth_date = ""
         self.gender = ""
-        self.rank = ""
-        self.points = ""
+        self.rank = 0
+        self.points = 0
         self.serialized = ""
 
     def __str__(self):
@@ -52,5 +52,5 @@ class Joueur:
         self.name = f"{self.first_name} {self.last_name}"
         self.birth_date = player_db["birth_date"]
         self.gender = player_db["gender"]
-        self.rank = player_db["rank"]
-        self.points = player_db["points"]
+        self.rank = int(player_db["rank"])
+        self.points = int(player_db["points"])

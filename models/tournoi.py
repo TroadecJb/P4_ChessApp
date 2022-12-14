@@ -63,6 +63,9 @@ class Tournoi:
         else:
             pass
 
+    def add_players(self, selected_player):
+        self.players_list = selected_player
+
     def add_description(self):
         prompt = input("Voulez-vous ajotuer une description ? (y/n)\n").lower()
         if prompt == "y":
@@ -72,13 +75,22 @@ class Tournoi:
             pass
 
     def serialize(self):
+        readable_player = [player.name for player in self.players_list]
+        # à dagager si la liste de compréhension au dessus fonctionne
+        readable = []
+        for player in self.players_list:
+            player = player.name
+            readable.append(player)
+
+        readable_round = [tour.serialized for tour in self.rounds_list]
+
         self.serialized = {
             "name": self.name,
             "place": self.place,
             "date": self.date,
             "number_of_round": self.number_of_rounds,
             "rounds_list": self.rounds_list,
-            "players": self.players_list,
+            "players": readable_player,
             "matchs_list": self.matchs_list,
             "time_mode": self.time_mode,
             "description": self.description,
