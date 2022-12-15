@@ -1,5 +1,5 @@
 from tinydb import TinyDB, Query, where
-from models import tournoi, joueur
+from models import tournoi, joueur, tour, match
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
@@ -26,7 +26,7 @@ class Controller_db:
     def search_player(self, info):
         index_data = 0
         player_data = JOUEUR_TABLE.search(
-            (where("first_name") == first_name) & (where("last_name") == last_name)
+            (where("first_name") == {info[0]}) & (where("last_name") == {info[1]})
         )
         if len(player_data) < 1:
             for idx, i in enumerate(player_data):
@@ -38,23 +38,6 @@ class Controller_db:
         else:
             pass
         return player_data[index_data]
-
-    def retrieve_turnament(self):
-        turnament_list = []
-        selected_turnament = ""
-
-        for turnament in TOURNOI_TABLE:
-            turnament_list.append(turnament)
-
-        for idx, turnament in enumerate(turnament_list):
-            print(
-                f"{idx + 1} -", turnament["name"], turnament["date"], turnament["place"]
-            )
-
-        choice = input("Sélectionnez le numéro du tournoi voulu :\n")
-        selected_turnament = turnament_list[int(choice) - 1]
-
-        return selected_turnament
 
     def search_turnament(self, info):
         turnament_data = TOURNOI_TABLE.search(
@@ -73,7 +56,50 @@ class Controller_db:
             pass
         return turnament_data[index_data]
 
+    def retrieve_turnament(self):
+        turnament_list = []
+        selected_turnament = ""
+
+        for turnament in TOURNOI_TABLE:
+            turnament_list.append(turnament)
+
+        for idx, turnament in enumerate(turnament_list):
+            print(
+                f"{idx + 1} -", turnament["name"], turnament["date"], turnament["place"]
+            )
+
+        choice = input("Sélectionnez le numéro du tournoi voulu :\n")
+        selected_turnament = turnament_list[int(choice) - 1]
+
+        return selected_turnament
+
+    def turnament_db_to_class(self, turnament_serialized):
+        turnament = tournoi.Tournoi()
+
+        turnament.name = turnament_serialized["name"]
+        turnament.place = turnament_serialized["place"]
+        turnament.date = turnament_serialized["date"]
+        turnament.number_of_rounds = turnament_serialized["number_of_round"]
+        # turnament.rounds_list = db["rounds_list"]
+        for tour in turnament_serialized["rounds_list"]:
+            tour_class = tour.Tour(tour["round_index"])
+            tour_class.start_time = tour["start_time"]
+            tour_class.end_time = tour["end_time"]
+            
+
+
+        for player in turnament_serialized["players"]:
+            player_data = self.search_player(player)
+            player_class = joueur.Joueur()
+            player_class.deserialize(x)
+            turnament.players_list.append(player_class)
+
+        turnament.matchs_list = db["matchs_list"]
+        turnament.time_mode = db["time_mode"]
+        turnament.description = db["description"]
+
     def save(self, x, table):
+        """From class object to serialize var stored in table."""
         if type(x) == list:
             for i in x:
                 i.serialize()
@@ -90,3 +116,5 @@ class Controller_db:
         else:
             x.serialize()
             table.update(x.serialized)
+
+    

@@ -70,11 +70,10 @@ class Tournoi_controller:
         tournoi_.rounds_list.append(first_round)
 
         for player in tournoi_.players_list:
-            print(type(player))
             player.reset_points()
 
         # round_one = tournoi_.rounds_list[O]
-        pairs_list = self.pair_sys.generate_inital_pairs(tournoi_.players_list)
+        pairs_list = self.pair_system.generate_inital_pairs(tournoi_.players_list)
 
         for idx, pair in enumerate(pairs_list):
             tournoi_.rounds_list[0].matchs_list.append(
@@ -94,7 +93,7 @@ class Tournoi_controller:
 
             for idx, pair in enumerate(pairs_list):
                 next_round.matchs_list.append(
-                    Match(idx, pair)
+                    Match(f"tour {index}, match {idx}", pair)
                 )  # tester si il ne faut pas créer une variable pour l'ajouter à une liste
 
             tournoi_.rounds_list.append(next_round)

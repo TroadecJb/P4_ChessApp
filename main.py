@@ -23,9 +23,11 @@ choice = input(
 if choice == "1":
     madchess = turnament_control.create_turnament()
     db_controller.save(madchess, TOURNOI_TABLE)
+
 elif choice == "2":
     new_players = DB_viewer.new_player_info()
-    db_controller.save(new_players, JOUEUR_TABLE)
+    JOUEUR_TABLE.insert_multiple(new_players)
+
 elif choice == "3":
     turnament_index = db_controller.retrieve_turnament()
     turnament = tournoi.Tournoi()
@@ -34,4 +36,14 @@ elif choice == "3":
         turnament.players_list = turnament_control.select_players_to_add()
         turnament.serialize()
         db_controller.update(turnament, TOURNOI_TABLE)
-    turnament_control.generate_first_round(turnament)
+
+    print(type(turnament))
+    print(turnament)
+    print(type(turnament.players_list))
+
+    for player in turnament.players_list:
+        print(type(player))
+        print(player)
+
+    # turnament_control.generate_first_round(turnament)
+    # db_controller.update(turnament, TOURNOI_TABLE)

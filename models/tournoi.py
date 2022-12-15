@@ -18,14 +18,10 @@ class Tournoi:
         self.serialized = ""
 
     def __str__(self):
-        print(
-            f"{self.name} a lieu à {self.place}, le {self.date}.\nLes participants sont {self.players_list}.\nC'est en tournoi en {self.number_of_rounds} tour(s) avec un contrôle de temps {self.time_mode}."
-        )
+        return f"{self.name} a lieu à {self.place}, le {self.date}.\nLes participants sont {self.players_list}.\nC'est en tournoi en {self.number_of_rounds} tour(s) avec un contrôle de temps {self.time_mode}."
 
     def __repr__(self):
-        print(
-            f"Tournoi(nom={self.name}, lieu={self.place}, date={self.date}, nombre_de_tour={self.number_of_rounds}, mode={self.time_mode}, participants={self.players_list}."
-        )
+        return f"Tournoi(nom={self.name}, lieu={self.place}, date={self.date}, nombre_de_tour={self.number_of_rounds}, mode={self.time_mode}, participants={self.players_list}."
 
     def set_name(self):
         turnament_name = input("Entrez le nom du tournoi :\n")
@@ -76,12 +72,6 @@ class Tournoi:
 
     def serialize(self):
         readable_player = [player.name for player in self.players_list]
-        # à dagager si la liste de compréhension au dessus fonctionne
-        readable = []
-        for player in self.players_list:
-            player = player.name
-            readable.append(player)
-
         readable_round = [tour.serialized for tour in self.rounds_list]
 
         self.serialized = {
@@ -89,7 +79,7 @@ class Tournoi:
             "place": self.place,
             "date": self.date,
             "number_of_round": self.number_of_rounds,
-            "rounds_list": self.rounds_list,
+            "rounds_list": readable_round,
             "players": readable_player,
             "matchs_list": self.matchs_list,
             "time_mode": self.time_mode,

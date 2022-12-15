@@ -2,7 +2,7 @@ import operator
 
 
 class Swiss_system:
-    def generate_inital_pairs(players_list):
+    def generate_inital_pairs(self, players_list):
         """
         Pair the players by their rank: top-half[i] with bottom-half[i].
         Returns a tuple for each pair.
@@ -16,7 +16,7 @@ class Swiss_system:
 
         return pairs
 
-    def generate_pairs(players_list, matchs_list):
+    def generate_pairs(self, players_list, matchs_list):
         """
         Pair the players by the points they made after each round.
         player[n] with player[n+1].

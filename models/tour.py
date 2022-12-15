@@ -11,7 +11,7 @@ class Tour:
         self.end_time = ""
         self.serialized = {
             "round_index": self.index,
-            "matchs_list": [],
+            "matchs_list": "",
             "start_time": self.start_time,
             "end_time": self.end_time,
         }

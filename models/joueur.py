@@ -38,9 +38,9 @@ class Joueur:
 
     def serialize(self):
         self.serialized = {
-            "first name": self.first_name,
-            "last name": self.last_name,
-            "birth date": self.birth_date,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "birth_date": self.birth_date,
             "gender": self.gender,
             "rank": self.rank,
             "points": self.points,
