@@ -11,7 +11,7 @@ class Tournoi:
         self.number_of_rounds = 4
         self.rounds_list = []
         self.players_list = []
-        self.matchs_list = []
+        # self.matchs_list = []
         self.time_mode = ""
         self.description = ""
         self.index_in_table = ""
@@ -71,17 +71,17 @@ class Tournoi:
             pass
 
     def serialize(self):
-        readable_player = [player.name for player in self.players_list]
-        readable_round = [tour.serialized for tour in self.rounds_list]
+        players_list = [player.serialize() for player in self.players_list]
+        rounds_list = [tour.serialize() for tour in self.rounds_list]
 
         self.serialized = {
             "name": self.name,
             "place": self.place,
             "date": self.date,
             "number_of_round": self.number_of_rounds,
-            "rounds_list": readable_round,
-            "players": readable_player,
-            "matchs_list": self.matchs_list,
+            "rounds_list": rounds_list,
+            "players_list": players_list,
+            # "matchs_list": self.matchs_list,
             "time_mode": self.time_mode,
             "description": self.description,
         }
@@ -92,7 +92,7 @@ class Tournoi:
         self.date = db["date"]
         self.number_of_rounds = db["number_of_round"]
         self.rounds_list = db["rounds_list"]
-        self.players_list = db["players"]
-        self.matchs_list = db["matchs_list"]
+        self.players_list = db["players_list"]
+        # self.matchs_list = db["matchs_list"]
         self.time_mode = db["time_mode"]
         self.description = db["description"]

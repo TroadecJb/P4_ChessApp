@@ -8,11 +8,11 @@ class Swiss_system:
         Returns a tuple for each pair.
         """
 
-        players_number = len(players_list)
+        players_number = int(len(players_list) / 2)
         sorted_players = sorted(players_list, key=operator.attrgetter("rank"))
         top_players = sorted_players[players_number:]
         bottom_players = sorted_players[:players_number]
-        pairs = zip(top_players, bottom_players)
+        pairs = [list(pair) for pair in zip(top_players, bottom_players)]
 
         return pairs
 

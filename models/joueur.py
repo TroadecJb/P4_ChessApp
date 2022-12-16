@@ -2,6 +2,7 @@ class Joueur:
     """Class for a player"""
 
     def __init__(self):
+        self.doc_id = ""
         self.first_name = ""
         self.last_name = ""
         self.name = ""
@@ -38,6 +39,7 @@ class Joueur:
 
     def serialize(self):
         self.serialized = {
+            "doc_id": self.doc_id,
             "first_name": self.first_name,
             "last_name": self.last_name,
             "birth_date": self.birth_date,
@@ -45,8 +47,10 @@ class Joueur:
             "rank": self.rank,
             "points": self.points,
         }
+        return self.serialized
 
     def deserialize(self, player_db):
+        self.doc_id = int(player_db.doc_id)
         self.first_name = player_db["first_name"]
         self.last_name = player_db["last_name"]
         self.name = f"{self.first_name} {self.last_name}"

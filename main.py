@@ -29,21 +29,34 @@ elif choice == "2":
     JOUEUR_TABLE.insert_multiple(new_players)
 
 elif choice == "3":
-    turnament_index = db_controller.retrieve_turnament()
-    turnament = tournoi.Tournoi()
-    turnament.deserialize(turnament_index)
+    turnament_data = db_controller.retrieve_turnament()
+    turnament = db_controller.deserialize_turnament(turnament_data)
     if len(turnament.players_list) == 0:
         turnament.players_list = turnament_control.select_players_to_add()
-        turnament.serialize()
+        # turnament.serialize()
         db_controller.update(turnament, TOURNOI_TABLE)
+    turnament_control.generate_first_round(turnament)
+    db_controller.update(turnament, TOURNOI_TABLE)
+    turnament_control.start_round(turnament)
+    db_controller.update(turnament, TOURNOI_TABLE)
+    turnament_control.end_round(turnament)
+    db_controller.update(turnament, TOURNOI_TABLE)
 
-    print(type(turnament))
-    print(turnament)
-    print(type(turnament.players_list))
+    # print(f"liste des tours: {turnament.rounds_list[0]}")
+    # for player in turnament.players_list:
+    #     print(type(player))
+    #     print(player)
+    # print(f"liste des joueurs: {turnament.players_list}")
+    # turnament.rounds_list[O].show_matchs()
 
-    for player in turnament.players_list:
-        print(type(player))
-        print(player)
+    #####
+    # print(type(turnament))
+    # print(turnament)
+    # print(type(turnament.players_list))
+
+    # for player in turnament.players_list:
+    #     print(type(player))
+    #     print(player)
 
     # turnament_control.generate_first_round(turnament)
     # db_controller.update(turnament, TOURNOI_TABLE)
