@@ -9,7 +9,7 @@ class Match:
 
     victory = 1
     loss = 0
-    draw = 0, 5
+    draw = 0.5
 
     def __init__(self, index):
         self.index = index
