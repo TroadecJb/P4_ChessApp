@@ -77,11 +77,11 @@ class Tournoi:
             "place": self.place,
             "date": self.date,
             "number_of_round": self.number_of_rounds,
+            "time_mode": self.time_mode,
+            "description": self.description,
             "rounds_list": self.rounds_list,
             "players": self.players_list,
             "matchs_list": self.matchs_list,
-            "time_mode": self.time_mode,
-            "description": self.description,
         }
 
     def deserialize(self, db):

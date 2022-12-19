@@ -4,11 +4,12 @@ class Joueur:
     def __init__(self):
         self.first_name = ""
         self.last_name = ""
-        self.name = ""
+        self.name = self.last_name, self.first_name
         self.birth_date = ""
         self.gender = ""
         self.rank = ""
         self.points = ""
+        self.doc_id = ""
         self.serialized = ""
 
     def __str__(self):
@@ -38,19 +39,22 @@ class Joueur:
 
     def serialize(self):
         self.serialized = {
-            "first name": self.first_name,
-            "last name": self.last_name,
-            "birth date": self.birth_date,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "birth_date": self.birth_date,
             "gender": self.gender,
+            "doc_id": self.id,
             "rank": self.rank,
             "points": self.points,
         }
+        return self.serialized
 
     def deserialize(self, player_db):
         self.first_name = player_db["first_name"]
         self.last_name = player_db["last_name"]
         self.name = f"{self.first_name} {self.last_name}"
         self.birth_date = player_db["birth_date"]
+        self.id = player_db["doc_id"]
         self.gender = player_db["gender"]
         self.rank = player_db["rank"]
         self.points = player_db["points"]

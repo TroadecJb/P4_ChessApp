@@ -14,10 +14,10 @@ class Tour:
     #     """From tuple or list_pairs, generate a match"""
 
     def start_round(self):
-        self.start_time = datetime.now()
+        self.start_time = str(datetime.now())
 
     def end_round(self):
-        self.end_time = datetime.now()
+        self.end_time = str(datetime.now())
 
     def show_match(self):
         pass
