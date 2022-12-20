@@ -10,8 +10,8 @@ DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
 
-db_controller = Controller_db()
-turnament_control = Tournoi_controller()
+controller_db = Controller_db()
+turnament_controller = Tournoi_controller()
 
 
 choice = input(

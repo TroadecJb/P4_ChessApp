@@ -5,7 +5,6 @@ class Joueur:
         self.doc_id = ""
         self.first_name = ""
         self.last_name = ""
-        self.name = ""
         self.birth_date = ""
         self.gender = ""
         self.rank = 0
@@ -13,12 +12,10 @@ class Joueur:
         self.serialized = ""
 
     def __str__(self):
-        return (
-            f"{self.name} est né le {self.birth_date}, a un classement de {self.rank}."
-        )
+        return f"{self.last_name} {self.first_name}"
 
     def __repr__(self):
-        return f"{self.name}, {self.birth_date}, {self.rank}"
+        return f"{self.last_name} {self.first_name}, {self.birth_date}, {self.rank}"
 
     def update_rank(self):
         current_rank = self.rank

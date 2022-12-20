@@ -20,14 +20,20 @@ class Tour:
         return f"Tour {self.index}, liste des matchs: {self.matchs_list}, début: {self.start_time}, fin: {self.end_time}."
 
     def show_matchs(self):
-        for match in match_list:
+        for match in self.matchs_list:
             match.__repr__()
 
-    def start_time(self):
-        self.start_time = datetime.now()
+    def starting_time(self):
+        date_time = datetime.now()
+        print(type(date_time))
+        c = date_time.strftime("%d/%m/%Y, %H:%M%S")
+        print(type(c))
+        self.start_time = c
 
-    def end_time(self):
-        self.end_time = datetime.now()
+    def ending_time(self):
+        time = datetime.now()
+
+        self.end_time = time.strftime("%d/%m/%Y, %H:%M%S")
         for match in self.matchs_list:
             match.set_result()
 
