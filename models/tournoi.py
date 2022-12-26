@@ -11,7 +11,7 @@ class Tournoi:
         self.number_of_rounds = 4
         self.rounds_list = []
         self.players_list = []
-        # self.matchs_list = []
+        self.matchs_list = []
         self.time_mode = ""
         self.description = ""
         self.index_in_table = ""

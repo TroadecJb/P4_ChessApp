@@ -15,7 +15,7 @@ class Joueur:
         return f"{self.last_name} {self.first_name}"
 
     def __repr__(self):
-        return f"{self.last_name} {self.first_name}, {self.birth_date}, {self.rank}"
+        return f"{self.last_name} {self.first_name}, {self.birth_date}, {self.rank}, {self.points}"
 
     def update_rank(self):
         current_rank = self.rank

@@ -25,15 +25,13 @@ class Tour:
 
     def starting_time(self):
         date_time = datetime.now()
-        print(type(date_time))
-        c = date_time.strftime("%d/%m/%Y, %H:%M%S")
-        print(type(c))
+        c = date_time.strftime("%d/%m/%Y, %H:%M:%S")
         self.start_time = c
 
     def ending_time(self):
         time = datetime.now()
 
-        self.end_time = time.strftime("%d/%m/%Y, %H:%M%S")
+        self.end_time = time.strftime("%d/%m/%Y, %H:%M:%S")
         for match in self.matchs_list:
             match.set_result()
 

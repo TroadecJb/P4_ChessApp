@@ -53,16 +53,5 @@ madchess.time_mode = "bullet"
 madchess.index_in_table = 1
 
 madchess.players_list.extend([jb, agathe, pierre, marie])
-turnament_controller.generate_first_round(madchess)
 
-print(madchess)
-
-for t in madchess.rounds_list:
-    t.show_matchs()
-    t.starting_time()
-    print("\n")
-    t.ending_time()
-
-print(madchess)
-for player in madchess.players_list:
-    print(player.points)
+turnament_controller.run_turnament(madchess)

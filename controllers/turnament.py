@@ -1,6 +1,7 @@
 from tinydb import TinyDB, Query, where
 from models import tournoi, tour, match, joueur
 from controllers import pairing_system
+import operator
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
@@ -66,24 +67,20 @@ class Tournoi_controller:
         """
         Generate first round for the turnament, with paired players according to pairing system.
         """
-        index = len(tournoi_.rounds_list)
+        index = len(tournoi_.rounds_list) + 1
         first_round = tour.Tour(index)
 
         for player in tournoi_.players_list:
             player.reset_points()
 
-        # round_one = tournoi_.rounds_list[O]
         pairs_list = self.pair_system.generate_inital_pairs(tournoi_.players_list)
 
         for idx, pair in enumerate(pairs_list):
-            print(type(pair), pair)
-            for i in pair:
-                print(type(i), i)
-            new_match = match.Match(f"tour {index}, match {idx}")
+            new_match = match.Match(f"tour {index}, match {idx + 1}")
             new_match.player_1 = pair[0]
             new_match.player_2 = pair[1]
-
             first_round.matchs_list.append(new_match)
+            tournoi_.matchs_list.append(sorted(pair, key=operator.attrgetter("doc_id")))
 
         tournoi_.rounds_list.append(first_round)
 
@@ -92,31 +89,38 @@ class Tournoi_controller:
         Generate next round, if in range of turnament's number of round.
         Pairs according to pairing system (no pair redundancy).
         """
-        index = len(tournoi_.rounds_list)
-        if index <= tournoi_.number_of_rounds:
-            next_round = tour.Tour(index)
+        index = len(tournoi_.rounds_list) + 1
+        next_round = tour.Tour(index)
 
-            pairs_list = self.pair_sys.generate_pairs(tournoi_.players_list)
+        pairs_list = self.pair_system.generate_pairs(
+            tournoi_.players_list, tournoi_.matchs_list
+        )
 
-            for idx, pair in enumerate(pairs_list):
-                new_match = match.Match(f"tour {index}, match {idx}")
-                new_match.players_list = pair
-                next_round.matchs_list.append(new_match)
+        for idx, pair in enumerate(pairs_list):
+            new_match = match.Match(f"tour {index}, match {idx + 1}")
+            new_match.player_1 = pair[0]
+            new_match.player_2 = pair[1]
+            next_round.matchs_list.append(new_match)
+            tournoi_.matchs_list.append(sorted(pair, key=operator.attrgetter("doc_id")))
 
-            tournoi_.rounds_list.append(next_round)
-        else:
-            pass
+        tournoi_.rounds_list.append(next_round)
 
     def start_round(self, tournoi_):
-        print(type(tournoi_.rounds_list[-1]), tournoi_.rounds_list[-1])
         current_round = tournoi_.rounds_list[-1]
-        current_round.start_time()
+        current_round.starting_time()
         print(f"start_round: {current_round}")
 
     def end_round(self, tournoi_):
-        current_round = tournoi_.round_list[-1]
-        current_round.end_time()
+        current_round = tournoi_.rounds_list[-1]
+        current_round.ending_time()
         print(f"Ended_round : {current_round}")
 
-    def run_turnament(self):
-        pass
+    def run_turnament(self, tournoi_):
+        while len(tournoi_.rounds_list) != tournoi_.number_of_rounds:
+            if not tournoi_.rounds_list:
+                self.generate_first_round(tournoi_)
+                self.start_round(tournoi_)
+                self.end_round(tournoi_)
+            self.generate_round(tournoi_)
+            self.start_round(tournoi_)
+            self.end_round(tournoi_)
