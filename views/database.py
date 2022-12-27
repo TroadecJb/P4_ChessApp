@@ -26,6 +26,7 @@ class DB_viewer:
             ).lower()
             gender = input(f"Indiquez le genre de {name} : \n").lower()
             rank = input(f"Indiquez le classement de {name} :\n").lower()
+
             new_player = {
                 "first_name": first_name,
                 "last_name": last_name,

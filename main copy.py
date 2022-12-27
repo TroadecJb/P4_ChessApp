@@ -1,10 +1,11 @@
 from tinydb import TinyDB, Query, where
+from datetime import datetime
 from models import joueur, tournoi, tour, match
 from controllers.database import Controller_db
 from controllers.turnament import Tournoi_controller
 from controllers.pairing_system import Swiss_system
 from views.database import DB_viewer
-from datetime import datetime
+
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
@@ -13,6 +14,7 @@ TOURNOI_TABLE = DB.table("tournois")
 controller_db = Controller_db()
 turnament_controller = Tournoi_controller()
 
+##### joueurs #####
 jb = joueur.Joueur()
 jb.doc_id = 1
 jb.first_name = "jean-baptiste"
@@ -31,7 +33,7 @@ agathe.rank = 2
 
 pierre = joueur.Joueur()
 pierre.doc_id = 3
-pierre.first_name = "pîerre"
+pierre.first_name = "pierre"
 pierre.last_name = "Robes"
 pierre.birth_date = "17/03/1750"
 pierre.gender = "homme"
@@ -44,6 +46,20 @@ marie.last_name = "curie"
 marie.birth_date = "31/11/1880"
 marie.rank = 4
 
+carl = joueur.Joueur()
+carl.doc_id = 5
+carl.first_name = "Carl"
+carl.last_name = "Von linné"
+carl.birth_date = "23/05/1707"
+carl.rank = 5
+
+Benazir = joueur.Joueur()
+Benazir.doc_id = 6
+Benazir.first_name = "Benazir"
+Benazir.last_name = "Bhutto"
+Benazir.birth_date = "21/06/1953"
+Benazir.rank = 4
+
 madchess = tournoi.Tournoi()
 madchess.name = "madchess"
 madchess.place = "guingamp"
@@ -52,6 +68,8 @@ madchess.number_of_rounds = 3
 madchess.time_mode = "bullet"
 madchess.index_in_table = 1
 
-madchess.players_list.extend([jb, agathe, pierre, marie])
+##########
+
+madchess.players_list.extend([jb, agathe, pierre, marie, carl, Benazir])
 
 turnament_controller.run_turnament(madchess)

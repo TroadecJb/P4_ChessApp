@@ -14,7 +14,7 @@ class Tournoi:
         self.matchs_list = []
         self.time_mode = ""
         self.description = ""
-        self.index_in_table = ""
+        self.doc_id = ""
         self.serialized = ""
 
     def __str__(self):
@@ -71,28 +71,30 @@ class Tournoi:
             pass
 
     def serialize(self):
-        players_list = [player.serialize() for player in self.players_list]
+        players_list = [player.doc_id for player in self.players_list]
         rounds_list = [tour.serialize() for tour in self.rounds_list]
 
         self.serialized = {
             "name": self.name,
             "place": self.place,
             "date": self.date,
-            "number_of_round": self.number_of_rounds,
+            "number_of_rounds": self.number_of_rounds,
             "rounds_list": rounds_list,
             "players_list": players_list,
-            # "matchs_list": self.matchs_list,
+            "matchs_list": self.matchs_list,
             "time_mode": self.time_mode,
             "description": self.description,
+            "doc_id": self.doc_id,
         }
 
-    def deserialize(self, db):
-        self.name = db["name"]
-        self.place = db["place"]
-        self.date = db["date"]
-        self.number_of_rounds = db["number_of_round"]
-        self.rounds_list = db["rounds_list"]
-        self.players_list = db["players_list"]
-        # self.matchs_list = db["matchs_list"]
-        self.time_mode = db["time_mode"]
-        self.description = db["description"]
+    # def deserialize(self, db):    #A faire ans le controleur de DB.
+    #     self.name = db["name"]
+    #     self.place = db["place"]
+    #     self.date = db["date"]
+    #     self.number_of_rounds = db["number_of_rounds"]
+    #     self.rounds_list = db["rounds_list"]
+    #     self.players_list = db["players_list"]
+    #     self.matchs_list = db["matchs_list"]
+    #     self.time_mode = db["time_mode"]
+    #     self.description = db["description"]
+    #     self.doc_id = db["doc_id"]

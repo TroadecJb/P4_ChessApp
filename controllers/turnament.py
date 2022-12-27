@@ -63,37 +63,38 @@ class Tournoi_controller:
         else:
             pass
 
-    def generate_first_round(self, tournoi_):
+    def generate_first_round(self, Tournoi):
         """
         Generate first round for the turnament, with paired players according to pairing system.
         """
-        index = len(tournoi_.rounds_list) + 1
+        index = len(Tournoi.rounds_list) + 1
         first_round = tour.Tour(index)
 
-        for player in tournoi_.players_list:
+        for player in Tournoi.players_list:
             player.reset_points()
 
-        pairs_list = self.pair_system.generate_inital_pairs(tournoi_.players_list)
+        pairs_list = self.pair_system.generate_inital_pairs(Tournoi.players_list)
 
         for idx, pair in enumerate(pairs_list):
             new_match = match.Match(f"tour {index}, match {idx + 1}")
             new_match.player_1 = pair[0]
             new_match.player_2 = pair[1]
+
             first_round.matchs_list.append(new_match)
-            tournoi_.matchs_list.append(sorted(pair, key=operator.attrgetter("doc_id")))
+            Tournoi.matchs_list.append([getattr(joueur, "doc_id") for joueur in pair])
 
-        tournoi_.rounds_list.append(first_round)
+        Tournoi.rounds_list.append(first_round)
 
-    def generate_round(self, tournoi_):
+    def generate_round(self, Tournoi):
         """
         Generate next round, if in range of turnament's number of round.
         Pairs according to pairing system (no pair redundancy).
         """
-        index = len(tournoi_.rounds_list) + 1
+        index = len(Tournoi.rounds_list) + 1
         next_round = tour.Tour(index)
 
         pairs_list = self.pair_system.generate_pairs(
-            tournoi_.players_list, tournoi_.matchs_list
+            Tournoi.players_list, Tournoi.matchs_list
         )
 
         for idx, pair in enumerate(pairs_list):
@@ -101,26 +102,26 @@ class Tournoi_controller:
             new_match.player_1 = pair[0]
             new_match.player_2 = pair[1]
             next_round.matchs_list.append(new_match)
-            tournoi_.matchs_list.append(sorted(pair, key=operator.attrgetter("doc_id")))
+            Tournoi.matchs_list.append(sorted(pair, key=operator.attrgetter("doc_id")))
 
-        tournoi_.rounds_list.append(next_round)
+        Tournoi.rounds_list.append(next_round)
 
-    def start_round(self, tournoi_):
-        current_round = tournoi_.rounds_list[-1]
+    def start_round(self, Tournoi):
+        current_round = Tournoi.rounds_list[-1]
         current_round.starting_time()
         print(f"start_round: {current_round}")
 
-    def end_round(self, tournoi_):
-        current_round = tournoi_.rounds_list[-1]
+    def end_round(self, Tournoi):
+        current_round = Tournoi.rounds_list[-1]
         current_round.ending_time()
         print(f"Ended_round : {current_round}")
 
-    def run_turnament(self, tournoi_):
-        while len(tournoi_.rounds_list) != tournoi_.number_of_rounds:
-            if not tournoi_.rounds_list:
-                self.generate_first_round(tournoi_)
-                self.start_round(tournoi_)
-                self.end_round(tournoi_)
-            self.generate_round(tournoi_)
-            self.start_round(tournoi_)
-            self.end_round(tournoi_)
+    def run_turnament(self, Tournoi):
+        while len(Tournoi.rounds_list) != Tournoi.number_of_rounds:
+            if not Tournoi.rounds_list:
+                self.generate_first_round(Tournoi)
+                self.start_round(Tournoi)
+                self.end_round(Tournoi)
+            self.generate_round(Tournoi)
+            self.start_round(Tournoi)
+            self.end_round(Tournoi)

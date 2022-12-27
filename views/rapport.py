@@ -14,18 +14,20 @@ class Rapport:
         for item in liste:
             readable = ""
 
-    def get_turnament_players(self, tournoi):
+    def get_turnament_players(self, Tournoi):
         sorting_choice = input(
             "Sélectionner le rangement  1- alphabétique | 2- classement"
         )
         if sorting_choice == "1":
-            liste = sorted(tournoi.players_list, key=operator.attrgetter("name"))
+            liste = sorted(Tournoi.players_list, key=operator.attrgetter("name"))
         elif sorting_choice == "2":
-            liste = sorted(tournoi.players_list, key=operator.attrgetter("rank"))
+            liste = sorted(Tournoi.players_list, key=operator.attrgetter("rank"))
 
         return liste
 
-    def get_all_turnaments():
+    def show_all_turnaments(
+        self,
+    ):
         liste = []
         turnament_data = TOURNOI_TABLE.all()
         for turnament in turnament_data:
@@ -33,3 +35,9 @@ class Rapport:
             liste.append(readable)
 
         return liste
+
+    def get_all_rounds(self, Tournoi):
+        rounds_list = [r for r in Tournoi.rounds_list]
+
+    def get_all_matchs(self, Tournoi):
+        liste = []

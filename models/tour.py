@@ -17,7 +17,7 @@ class Tour:
         }
 
     def __repr__(self):
-        return f"Tour {self.index}, liste des matchs: {self.matchs_list}, début: {self.start_time}, fin: {self.end_time}."
+        return f"Tour {self.index}\n liste des matchs:\n{self.matchs_list}\ndébut: {self.start_time}\nfin: {self.end_time}."
 
     def show_matchs(self):
         for match in self.matchs_list:
@@ -25,8 +25,7 @@ class Tour:
 
     def starting_time(self):
         date_time = datetime.now()
-        c = date_time.strftime("%d/%m/%Y, %H:%M:%S")
-        self.start_time = c
+        self.start_time = date_time.strftime("%d/%m/%Y, %H:%M:%S")
 
     def ending_time(self):
         time = datetime.now()

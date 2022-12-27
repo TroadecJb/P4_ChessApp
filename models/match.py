@@ -39,8 +39,8 @@ class Match:
     def deserialize(self, data):  # chelou
         self.index = data["index"]
         self.players_list = data["players_list"]
-        self.player_1 = players_list[0]
-        self.player_2 = players_list[1]
+        self.player_1 = data["player_1"]
+        self.player_2 = data["player_2"]
         self.match_result = data["match_result"]
 
     def set_result(self):

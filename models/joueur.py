@@ -17,7 +17,7 @@ class Joueur:
     def __repr__(self):
         return f"{self.last_name} {self.first_name}, {self.birth_date}, {self.rank}, {self.points}"
 
-    def update_rank(self):
+    def update_rank(self):  # A deplacer dans le controleur DB
         current_rank = self.rank
         print(f"{self.name}, classement actuel : {current_rank}")
         prompt = input(f"Mettre à jour le classement de {self.name} ? (y/n)\n").lower()
@@ -30,7 +30,7 @@ class Joueur:
     def reset_points(self):
         """
         The points allows to know how to update the rank of the player at the end of the turnament.
-        At the beginning of a turnament, resets the points to 0.
+        In the beginning of a new turnament, resets the points to 0.
         """
         self.points = 0
 

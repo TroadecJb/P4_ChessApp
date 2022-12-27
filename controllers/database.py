@@ -8,16 +8,13 @@ TOURNOI_TABLE = DB.table("tournois")
 
 
 class Controller_db:
-    def show_turnaments(self):
-        print("liste des tournois:\n")
-        for idx, turnament in enumerate(TOURNOI_TABLE):
-            print(
-                f"{idx}- ",
-                turnament["name"],
-                turnament["date"],
-                turnament["place"],
-                f"\n",
-            )
+    """exchange between DB and program"""
+
+    def get_all_turnaments(self):
+        turnaments_data = TOURNOI_TABLE.all()
+        liste = [turnament for turnament in turnaments_data]
+
+        return liste
 
     def show_players(self):
         print("liste des joueurs:\n")
@@ -84,35 +81,33 @@ class Controller_db:
 
         turnament.players_list = []
         for p in turnament_serialized["players_list"]:
-            print(type(p), p)
-            # player_data = self.search_player(p)
             player_class = joueur.Joueur()
-            player_class.deserialize(p)
+            # Query pour récupérer joueur via le doc_id dans JOUEUR_TABLE
+            player_class.deserialize("?")
             turnament.players_list.append(player_class)
 
         turnament.rounds_list = []
         for t in turnament_serialized["rounds_list"]:
             tour_class = tour.Tour(t["round_index"])
             tour_class.deserialize(t)
+
             for m in tour_class.matchs_list:
                 match_class = match.Match(
                     m["match_index"],
                 )
                 match_class.deserialize(m)
-                match_class.players_list = [
-                    player.doc_id == int(m.doc_id) for player in turnament.players_list
-                ]
+                # Query pour récupérer joueur via le doc_id dans JOUEUR_TABLE
 
             turnament.rounds_list.append(tour_class)
 
-        # turnament.matchs_list = db["matchs_list"]
+        turnament.matchs_list = db["matchs_list"]
         turnament.time_mode = turnament_serialized["time_mode"]
         turnament.description = turnament_serialized["description"]
 
         return turnament
 
     def save(self, x, table):
-        """From class object to serialize var stored in table."""
+        """From class object to serialize attr, stored in table."""
         if type(x) == list:
             for i in x:
                 i.serialize()

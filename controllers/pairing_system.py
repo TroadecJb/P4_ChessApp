@@ -23,7 +23,7 @@ class Swiss_system:
         Pair the players by the points they made after each round.
         player[n] with player[n+1].
         If same score points, they are paired according to rank.
-        If paired already occured, the next player in position is picked
+        If the pair already occured, the next player in position is picked
         """
 
         players_number = len(players_list)
@@ -56,8 +56,6 @@ class Swiss_system:
             sorted_players.remove(pair_to_check[1])
 
             pairs.append(pair)
-            matchs_list.append(pair)
-
-        print("deuxième liste  ", pairs)
+            # matchs_list.append(pair)
 
         return pairs
