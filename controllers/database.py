@@ -37,7 +37,9 @@ class Controller_db:
             pass
         return player_data[index_data]
 
-    def search_turnament(self, info):
+    def search_turnament(
+        self, info
+    ):  # problème avec la confirmation de sélection, dans tous les cas un tournoi est retourné
         turnament_data = TOURNOI_TABLE.search(
             (where("name") == info[0])
             & (where("date") == info[1])
@@ -105,6 +107,33 @@ class Controller_db:
         turnament.description = turnament_serialized["description"]
 
         return turnament
+
+    def deserialize_round(self, Tournoi):
+        rounds_list = []
+        for t in Tournoi.rounds_list:
+            tour_class = tour.Tour(t["round_index"])
+            tour_class.matchs_list = t["matchs_list"]
+            tour_class.start_time = t["start_time"]
+            tour_class.end_time = t["end_time"]
+
+        return rounds_list
+
+    def deserialize_match(self, Tournoi):
+        matchs_list = []
+        for t in Tournoi.rounds_list:
+            for m in t.matchs_list:
+                match_class = match.Match(m["match_index"])
+                match_class.match_result = m["match_result"]
+                match_class.player_1 = [
+                    player
+                    for player in Tournoi.players_list
+                    if player.doc_id == m["player_1"]
+                ]
+                match_class.player_2 = [
+                    player
+                    for player in Tournoi.players_list
+                    if player.doc_id == m["player_2"]
+                ]
 
     def save(self, x, table):
         """From class object to serialize attr, stored in table."""
