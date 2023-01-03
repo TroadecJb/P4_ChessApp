@@ -39,5 +39,8 @@ class Rapport:
     def get_all_rounds(self, Tournoi):
         rounds_list = [r for r in Tournoi.rounds_list]
 
+        return rounds_list
+
     def get_all_matchs(self, Tournoi):
+        rounds_list = self.get_all_rounds(Tournoi)
         liste = []

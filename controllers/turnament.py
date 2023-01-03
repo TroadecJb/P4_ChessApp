@@ -117,6 +117,11 @@ class Tournoi_controller:
         print(f"Ended_round : {current_round}")
 
     def run_turnament(self, Tournoi):
+        if len(Tournoi.players_list) == 0:
+            Tournoi.players_list = self.select_players_to_add()
+        else:
+            pass
+
         while len(Tournoi.rounds_list) != Tournoi.number_of_rounds:
             if not Tournoi.rounds_list:
                 self.generate_first_round(Tournoi)

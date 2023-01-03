@@ -6,7 +6,6 @@ class Joueur:
         self.first_name = ""
         self.last_name = ""
         self.birth_date = ""
-        self.gender = ""
         self.rank = 0
         self.points = 0
         self.serialized = ""
@@ -40,7 +39,6 @@ class Joueur:
             "first_name": self.first_name,
             "last_name": self.last_name,
             "birth_date": self.birth_date,
-            "gender": self.gender,
             "rank": self.rank,
             "points": self.points,
         }
@@ -52,6 +50,34 @@ class Joueur:
         self.last_name = player_db["last_name"]
         self.name = f"{self.first_name} {self.last_name}"
         self.birth_date = player_db["birth_date"]
-        self.gender = player_db["gender"]
         self.rank = int(player_db["rank"])
         self.points = int(player_db["points"])
+
+    def update_info(self):
+        self.set_first_name()
+        self.set_last_name()
+        self.set_birth_date()
+        self.rank()
+        self.set_points()
+
+    def set_first_name(self):
+        player_fisrt_name = input("Entrez le prénom du joueur:\n")
+        self.first_name = player_fisrt_name
+
+    def set_last_name(self):
+        player_last_name = input("Entrez le nom du joueur :\n")
+        self.last_name = player_last_name
+
+    def set_birth_date(self):
+        player_birth_date = input(
+            "Entrez la date de naissance du joueur (dd/mm/yyyy):\n"
+        )
+        self.birth_date = player_birth_date
+
+    def set_rank(self):
+        player_rank = input("Entrez le classement du joueur :\n")
+        self.rank = player_rank
+
+    def set_points(self):
+        player_points = input("Entrez les points du joueur:\n")
+        self.points = player_points

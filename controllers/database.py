@@ -16,26 +16,57 @@ class Controller_db:
 
         return liste
 
-    def show_players(self):
-        print("liste des joueurs:\n")
-        for player in JOUEUR_TABLE:
-            print(f"\t", player["last_name"], player["first_name"])
+    def add_players_to_DB(self, players_data):
+        """Add to players_data to the table JOUEUR_TABLE"""
+        JOUEUR_TABLE.insert_multiple(players_data)
 
-    def search_player(self, info):
-        index_data = 0
-        player_data = JOUEUR_TABLE.search(
-            (where("first_name") == {info[0]}) & (where("last_name") == {info[1]})
-        )
-        if len(player_data) < 1:
-            for idx, i in enumerate(player_data):
-                print(idx + 1, i)
-            index_data = input("Entrez l'index du joueur souahité :\n")
-            confirmation = input(
-                f"Confirmez la sélection du joueur suivant (y/n) :\n{player_data[index_data-1]}\n"
+    # def show_players(self):
+    #     print("liste des joueurs:\n")
+    #     for player in JOUEUR_TABLE:
+    #         print(f"\t", player["last_name"], player["first_name"])
+
+    # def search_player(self, info):
+    #     index_data = 0
+    #     player_data = JOUEUR_TABLE.search(
+    #         (where("first_name") == {info[0]}) & (where("last_name") == {info[1]})
+    #     )
+    #     if len(player_data) < 1:
+    #         for idx, i in enumerate(player_data):
+    #             print(idx + 1, i)
+    #         index_data = input("Entrez l'index du joueur souahité :\n")
+    #         confirmation = input(
+    #             f"Confirmez la sélection du joueur suivant (y/n) :\n{player_data[index_data-1]}\n"
+    #         )
+    #     else:
+    #         pass
+    #     return player_data[index_data]
+
+    def get_players_from_DB(self):
+        """Retrieve player from database, based on user selection, returns the list of class Joueur"""
+        players_list = []
+        index_players = []
+        adding_player = True
+
+        for player in JOUEUR_TABLE:
+            print(f"{player.doc_id} - {player.last_name} {player.first_name}")
+
+        while adding_player:
+            choice = input(
+                "Entrez l'index des joueurs que vous souhaitez modifier :\n(pour arrêter n'entrez aucun index et validez]\n"
             )
-        else:
-            pass
-        return player_data[index_data]
+            if len(choice) > 0:
+                index_players.append(choice)
+            else:
+                adding_player = False
+
+        Player = Query()
+        for index in index_players:
+            player_data = JOUEUR_TABLE.search(Player.doc_id == index)
+            player = joueur.Joueur()
+            player.deserialize(player_data)
+            players_list.append(player)
+
+        return players_list
 
     def search_turnament(
         self, info
@@ -138,14 +169,18 @@ class Controller_db:
             x.serialize()
             table.insert(x.serialized)
 
-    def update(self, x, table):
+    def update_player(self, x):
         if type(x) == list:
             for i in x:
                 i.serialize()
-                table.update(i.serialized)
+                JOUEUR_TABLE.update(i.serialized)
         else:
             x.serialize()
-            table.update(x.serialized)
+            JOUEUR_TABLE.update(x.serialized)
+
+    def update_turnament(self, Tournoi):
+        Tournoi.serialize()
+        TOURNOI_TABLE.upadete(Tournoi.serialized)
 
     # def deserialize(self, data):
     #     self.name = db["name"]
