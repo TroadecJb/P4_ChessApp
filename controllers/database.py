@@ -79,30 +79,20 @@ class Controller_db:
         turnament.name = turnament_serialized["name"]
         turnament.place = turnament_serialized["place"]
         turnament.date = turnament_serialized["date"]
-        turnament.number_of_rounds = int(turnament_serialized["number_of_round"])
+        turnament.number_of_rounds = int(turnament_serialized["number_of_rounds"])
 
         turnament.players_list = []
         for p in turnament_serialized["players_list"]:
             player_class = joueur.Joueur()
-            # Query pour récupérer joueur via le doc_id dans JOUEUR_TABLE
-            player_class.deserialize("?")
+
+            player = Query()
+            player_data = JOUEUR_TABLE.search(p.doc_id == player.doc_id)
+
+            player_class.deserialize(player_data)
             turnament.players_list.append(player_class)
 
-        turnament.rounds_list = []
-        for t in turnament_serialized["rounds_list"]:
-            tour_class = tour.Tour(t["round_index"])
-            tour_class.deserialize(t)
-
-            for m in tour_class.matchs_list:
-                match_class = match.Match(
-                    m["match_index"],
-                )
-                match_class.deserialize(m)
-                # Query pour récupérer joueur via le doc_id dans JOUEUR_TABLE
-
-            turnament.rounds_list.append(tour_class)
-
-        turnament.matchs_list = db["matchs_list"]
+        turnament.rounds_list = turnament_serialized["rounds_list"]
+        turnament.matchs_list = turnament_serialized["matchs_list"]
         turnament.time_mode = turnament_serialized["time_mode"]
         turnament.description = turnament_serialized["description"]
 
@@ -115,8 +105,9 @@ class Controller_db:
             tour_class.matchs_list = t["matchs_list"]
             tour_class.start_time = t["start_time"]
             tour_class.end_time = t["end_time"]
+            rounds_list.append(tour_class)
 
-        return rounds_list
+        Tournoi.rounds_list = rounds_list
 
     def deserialize_match(self, Tournoi):
         matchs_list = []
@@ -134,6 +125,8 @@ class Controller_db:
                     for player in Tournoi.players_list
                     if player.doc_id == m["player_2"]
                 ]
+                matchs_list.append(match_class)
+            t.matchs_list = matchs_list
 
     def save(self, x, table):
         """From class object to serialize attr, stored in table."""

@@ -71,7 +71,10 @@ class Tournoi:
             pass
 
     def serialize(self):
-        players_list = [player.doc_id for player in self.players_list]
+        players_list = []
+        for player in self.players_list:
+            players_list.append(player.doc_id)
+
         rounds_list = [tour.serialize() for tour in self.rounds_list]
 
         self.serialized = {
@@ -84,7 +87,6 @@ class Tournoi:
             "matchs_list": self.matchs_list,
             "time_mode": self.time_mode,
             "description": self.description,
-            "doc_id": self.doc_id,
         }
 
     # def deserialize(self, db):    #A faire ans le controleur de DB.
