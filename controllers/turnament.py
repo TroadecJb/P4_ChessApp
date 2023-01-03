@@ -1,11 +1,14 @@
 from tinydb import TinyDB, Query, where
 from models import tournoi, tour, match, joueur
 from controllers import pairing_system
+from controllers.database import Controller_db
 import operator
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
+
+controller_db = Controller_db()
 
 
 class Tournoi_controller:
@@ -127,6 +130,8 @@ class Tournoi_controller:
                 self.generate_first_round(Tournoi)
                 self.start_round(Tournoi)
                 self.end_round(Tournoi)
+                controller_db.update_turnament(Tournoi)
             self.generate_round(Tournoi)
             self.start_round(Tournoi)
             self.end_round(Tournoi)
+            controller_db.update_turnament(Tournoi)

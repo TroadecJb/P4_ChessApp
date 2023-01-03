@@ -159,15 +159,20 @@ class Controller_db:
                 matchs_list.append(match_class)
             t.matchs_list = matchs_list
 
-    def save(self, x, table):
+    def save_turnament(self, Tournoi):
         """From class object to serialize attr, stored in table."""
-        if type(x) == list:
-            for i in x:
+        Tournoi.serialize()
+        TOURNOI_TABLE.insert(Tournoi.serialized)
+
+    def save_player(self, player):
+        """From class object to serialize attr, stored in table."""
+        if type(player) == list:
+            for i in player:
                 i.serialize()
-                table.insert(i.serialized)
+                JOUEUR_TABLE.insert(i.serialized)
         else:
-            x.serialize()
-            table.insert(x.serialized)
+            player.serialize()
+            JOUEUR_TABLE.insert(player.serialized)
 
     def update_player(self, x):
         if type(x) == list:
@@ -180,7 +185,7 @@ class Controller_db:
 
     def update_turnament(self, Tournoi):
         Tournoi.serialize()
-        TOURNOI_TABLE.upadete(Tournoi.serialized)
+        TOURNOI_TABLE.update(Tournoi.serialized)
 
     # def deserialize(self, data):
     #     self.name = db["name"]

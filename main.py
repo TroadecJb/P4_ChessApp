@@ -1,3 +1,5 @@
 from views.menu import Main_menu
 
-Main_menu.program_selection()
+menu = Main_menu()
+
+menu.program_selection()
