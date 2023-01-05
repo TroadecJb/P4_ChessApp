@@ -80,10 +80,13 @@ class Main_menu:
                 controller_db.save_turnament(new_turnament)
             elif choice == "2":
                 selected_turnament = controller_db.retrieve_turnament()
-                selected_turnament = controller_db.deserialize_turnament(
-                    selected_turnament
-                )
-                tournoi_controller.run_turnament(selected_turnament)
+                if selected_turnament:
+                    selected_turnament = controller_db.deserialize_turnament(
+                        selected_turnament
+                    )
+                    tournoi_controller.run_turnament(selected_turnament)
+                else:
+                    pass
             elif choice == "3":
                 selected_turnament = controller_db.retrieve_turnament()
                 selected_turnament = controller_db.deserialize_turnament(

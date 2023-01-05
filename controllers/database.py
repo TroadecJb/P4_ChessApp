@@ -1,10 +1,13 @@
 from tinydb import TinyDB, Query, where
-from models import tournoi, joueur, tour, match
+from models import tournoi, joueur, tour, match, exceptions
+from views.user_input import User_input
 import operator
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
+
+user_input = User_input()
 
 
 class Controller_db:
@@ -51,25 +54,27 @@ class Controller_db:
         """Returns serialized turnament from table."""
         turnament_list = []
         selected_turnament = ""
+        turnament_data = TOURNOI_TABLE.all()
 
-        for turnament in TOURNOI_TABLE:
-            turnament_list.append(turnament)
+        if turnament_data:
+            for turnament in TOURNOI_TABLE:
+                print(
+                    f"{turnament.doc_id} -",
+                    turnament["name"],
+                    turnament["date"],
+                    turnament["place"],
+                )
 
-        prompt = "Sélectionnez le numéro du tournoi voulu :"
-        print(prompt, "\n")
+            prompt = "Sélectionnez le numéro du tournoi voulu :"
+            print(prompt, "\n")
 
-        for idx, turnament in enumerate(turnament_list):
-            print(
-                f"\t{idx + 1} -",
-                turnament["name"],
-                turnament["date"],
-                turnament["place"],
-            )
+            choice = user_input.int_input()
+            selected_turnament = TOURNOI_TABLE.get(doc_id=choice)
 
-        choice = input()
-        selected_turnament = turnament_list[int(choice) - 1]
-
-        return selected_turnament
+            return selected_turnament
+        else:
+            message = "Aucun tournoi dans la base de donnée."
+            print(message)
 
     def deserialize_turnament(self, turnament_serialized):
         """Deserializes turnament, deserializes every players, rounds and matchs."""

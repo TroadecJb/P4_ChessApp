@@ -18,10 +18,10 @@ class Tournoi:
         self.serialized = {}
 
     def __str__(self):
-        return f"{self.name} a lieu à {self.place}, le {self.date}.\nLes participants sont {self.players_list}.\nC'est en tournoi en {self.number_of_rounds} tour(s) avec un contrôle de temps {self.time_mode}."
+        return f"\n{self.name} a lieu à {self.place}, le {self.date}.\nLes participants sont {self.players_list}.\nC'est en tournoi en {self.number_of_rounds} tour(s) avec un contrôle de temps {self.time_mode}."
 
     def __repr__(self):
-        return f"Tournoi(nom={self.name}, lieu={self.place}, date={self.date}, nombre_de_tour={self.number_of_rounds}, mode={self.time_mode}, participants={self.players_list}."
+        return f"\nTournoi(nom={self.name}, lieu={self.place}, date={self.date}, nombre_de_tour={self.number_of_rounds}, mode={self.time_mode}, participants={self.players_list}."
 
     def set_name(self):
         turnament_name = input("Entrez le nom du tournoi :\n")
@@ -51,13 +51,16 @@ class Tournoi:
             "Le nombre de tour par défaut est de 4, voulez-vous le modifier ? (y/n)\n"
         ).lower()
         if prompt == "y":
-            choice = int(input("Indiquez le nombre de tour pour ce tournoi :\n"))
-            if choice is type(int):
-                self.number_of_rounds = choice
-            else:
-                pass
+            choice = input("Indiquez le nombre de tour pour ce tournoi :\n")
+            try:
+                int(choice)
+                self.number_of_rounds = int(choice)
+            except ValueError:
+                print("Entrez un nombre pour le nombre de tour.\n")
+                self.set_number_rounds()
         else:
             self.number_of_rounds = 4
+            print("\t", self.number_of_rounds, type(self.number_of_rounds))
 
     def add_players(self, selected_player):
         self.players_list = selected_player
