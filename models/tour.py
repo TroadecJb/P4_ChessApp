@@ -11,7 +11,7 @@ class Tour:
         self.end_time = ""
         self.serialized = {
             "round_index": self.index,
-            "matchs_list": "",
+            "matchs_list": [],
             "start_time": self.start_time,
             "end_time": self.end_time,
         }
@@ -35,7 +35,12 @@ class Tour:
             match.set_result()
 
     def serialize(self):
-        matchs_list = [match.serialize() for match in self.matchs_list]
+        matchs_list = []
+        for match in self.matchs_list:
+            x = match.serialize()
+            matchs_list.append(x)
+
+        # matchs_list = [match.serialize() for match in self.matchs_list]
 
         self.serialized = {
             "round_index": self.index,

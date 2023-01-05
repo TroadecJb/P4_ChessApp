@@ -8,14 +8,14 @@ class Tournoi:
         self.name = ""
         self.place = ""
         self.date = ""
-        self.number_of_rounds = 4
+        self.number_of_rounds = ""
         self.rounds_list = []
         self.players_list = []
         self.matchs_list = []
         self.time_mode = ""
         self.description = ""
         self.doc_id = ""
-        self.serialized = ""
+        self.serialized = {}
 
     def __str__(self):
         return f"{self.name} a lieu à {self.place}, le {self.date}.\nLes participants sont {self.players_list}.\nC'est en tournoi en {self.number_of_rounds} tour(s) avec un contrôle de temps {self.time_mode}."
@@ -57,7 +57,7 @@ class Tournoi:
             else:
                 pass
         else:
-            pass
+            self.number_of_rounds = 4
 
     def add_players(self, selected_player):
         self.players_list = selected_player
@@ -75,7 +75,16 @@ class Tournoi:
         for player in self.players_list:
             players_list.append(player.doc_id)
 
-        rounds_list = [tour.serialize() for tour in self.rounds_list]
+        rounds_list = []
+        for r in self.rounds_list:
+            x = r.serialize()
+            rounds_list.append(x)
+
+        # matchs_list = []
+        # for m in self.matchs_list:
+        #     print(type(m), m)
+        #     x = m.serialize()
+        #     matchs_list.append(x)
 
         self.serialized = {
             "name": self.name,
@@ -87,16 +96,7 @@ class Tournoi:
             "matchs_list": self.matchs_list,
             "time_mode": self.time_mode,
             "description": self.description,
+            "doc_id": self.doc_id,
         }
 
-    # def deserialize(self, db):    #A faire ans le controleur de DB.
-    #     self.name = db["name"]
-    #     self.place = db["place"]
-    #     self.date = db["date"]
-    #     self.number_of_rounds = db["number_of_rounds"]
-    #     self.rounds_list = db["rounds_list"]
-    #     self.players_list = db["players_list"]
-    #     self.matchs_list = db["matchs_list"]
-    #     self.time_mode = db["time_mode"]
-    #     self.description = db["description"]
-    #     self.doc_id = db["doc_id"]
+        return self.serialized

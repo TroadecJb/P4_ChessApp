@@ -25,7 +25,7 @@ class Match:
         }
 
     def __repr__(self):
-        return f"Match {self.index}| joueurs : {self.player_1}, {self.player_2}| {self.match_result}"
+        return f"{self.index}\njoueurs : {self.player_1}, {self.player_2}\n{self.match_result}"
 
     def serialize(self):
         self.serialized = {

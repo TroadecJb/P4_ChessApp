@@ -1,17 +1,17 @@
 class DB_viewer:
-    def ask_player_info(self):
-        last_name = input("Entrez le nom de famille du joueur :\n").lower()
-        first_name = input("Entrez le prénom du joueur :\n").lower()
-        birth_date = input("Entrez la date de naissance du joueur (dd/mm/yyyy) :\n")
-        info = (last_name, first_name, birth_date)
-        return info
+    # def ask_player_info(self):
+    #     last_name = input("Entrez le nom de famille du joueur :\n").lower()
+    #     first_name = input("Entrez le prénom du joueur :\n").lower()
+    #     birth_date = input("Entrez la date de naissance du joueur (dd/mm/yyyy) :\n")
+    #     info = (last_name, first_name, birth_date)
+    #     return info
 
-    def ask_turnament_info(self):
-        turnament_name = input("Entrez le nom du tournoi :\n").lower()
-        turnament_date = input("Entrez la date du tournoi :\n").lower()
-        turnament_place = input("Entrez le lieu du tournoi :\n").lower()
-        info = (turnament_name, turnament_date, turnament_place)
-        return info
+    # def ask_turnament_info(self):
+    #     turnament_name = input("Entrez le nom du tournoi :\n").lower()
+    #     turnament_date = input("Entrez la date du tournoi :\n").lower()
+    #     turnament_place = input("Entrez le lieu du tournoi :\n").lower()
+    #     info = (turnament_name, turnament_date, turnament_place)
+    #     return info
 
     def new_player_info(self):
         new_player_list = []

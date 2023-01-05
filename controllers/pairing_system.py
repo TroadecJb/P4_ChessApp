@@ -15,7 +15,7 @@ class Swiss_system:
         top_players = sorted_players[:players_number]
         bottom_players = sorted_players[players_number:]
         pairs = [list(pair) for pair in zip(top_players, bottom_players)]
-        print("liste initial  ", pairs)
+
         return pairs
 
     def generate_pairs(self, players_list, matchs_list):

@@ -14,7 +14,7 @@ class Joueur:
         return f"{self.last_name} {self.first_name}"
 
     def __repr__(self):
-        return f"{self.last_name} {self.first_name}, {self.birth_date}, {self.rank}, {self.points}"
+        return f"{self.last_name} {self.first_name}, {self.birth_date}, rank: {self.rank}, points: {self.points}"
 
     def update_rank(self):  # A deplacer dans le controleur DB
         current_rank = self.rank
@@ -45,7 +45,7 @@ class Joueur:
         return self.serialized
 
     def deserialize(self, player_db):
-        self.doc_id = int(player_db.doc_id)
+        self.doc_id = player_db.doc_id
         self.first_name = player_db["first_name"]
         self.last_name = player_db["last_name"]
         self.name = f"{self.first_name} {self.last_name}"
@@ -57,7 +57,7 @@ class Joueur:
         self.set_first_name()
         self.set_last_name()
         self.set_birth_date()
-        self.rank()
+        self.set_rank()
         self.set_points()
 
     def set_first_name(self):

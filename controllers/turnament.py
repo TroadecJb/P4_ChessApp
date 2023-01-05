@@ -85,6 +85,7 @@ class Tournoi_controller:
 
             first_round.matchs_list.append(new_match)
             Tournoi.matchs_list.append([getattr(joueur, "doc_id") for joueur in pair])
+            print("\ntournoi match_list, generate first round", Tournoi.matchs_list)
 
         Tournoi.rounds_list.append(first_round)
 
@@ -105,7 +106,8 @@ class Tournoi_controller:
             new_match.player_1 = pair[0]
             new_match.player_2 = pair[1]
             next_round.matchs_list.append(new_match)
-            Tournoi.matchs_list.append(sorted(pair, key=operator.attrgetter("doc_id")))
+            Tournoi.matchs_list.append([getattr(joueur, "doc_id") for joueur in pair])
+            print("\ntournoi match_list, generate round", Tournoi.matchs_list)
 
         Tournoi.rounds_list.append(next_round)
 
