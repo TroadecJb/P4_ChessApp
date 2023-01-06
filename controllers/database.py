@@ -1,17 +1,22 @@
 from tinydb import TinyDB, Query, where
 from models import tournoi, joueur, tour, match, exceptions
-from views.user_input import User_input
+from views.user_input import User_choice
 import operator
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
 
-user_input = User_input()
+user_input = User_choice()
 
 
 class Controller_db:
     """exchange between DB and program"""
+
+    def get_doc_id(self, table):
+        table_data = table.all()
+        ids = [item.doc_id for item in table_data]
+        return ids
 
     def get_all_turnaments(self):
         """Return a list of every turnament in the table"""
@@ -33,12 +38,14 @@ class Controller_db:
         for player in JOUEUR_TABLE:
             print(f"{player.doc_id} -", player["last_name"], player["first_name"])
 
+        players_ids = self.get_doc_id(JOUEUR_TABLE)
+
         while adding_player:
-            choice = input(
-                "Entrez l'index des joueurs que vous souhaitez modifier :\n(pour arrêter n'entrez aucun index et validez]\n"
-            )
+            prompt = "Entrez l'index des joueurs que vous souhaitez modifier :\n(pour arrêter n'entrez aucun index et validez]\n"
+            print(prompt)
+            choice = user_input.int_range_input(players_ids)
             if len(choice) > 0:
-                index_players.append(int(choice))
+                index_players.append(choice)
             else:
                 adding_player = False
 
@@ -64,11 +71,11 @@ class Controller_db:
                     turnament["date"],
                     turnament["place"],
                 )
-
+            turnament_ids = self.get_doc_id(TOURNOI_TABLE)
             prompt = "Sélectionnez le numéro du tournoi voulu :"
             print(prompt, "\n")
 
-            choice = user_input.int_input()
+            choice = user_input.int_range_input(turnament_ids)
             selected_turnament = TOURNOI_TABLE.get(doc_id=choice)
 
             return selected_turnament

@@ -1,14 +1,15 @@
-from tinydb import TinyDB, Query, where
+from tinydb import TinyDB
 from models import tournoi, tour, match, joueur
 from controllers import pairing_system
 from controllers.database import Controller_db
-import operator
+from views.user_input import User_choice
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
 
 controller_db = Controller_db()
+user_input = User_choice()
 
 
 class Tournoi_controller:
@@ -16,44 +17,49 @@ class Tournoi_controller:
         self.pair_system = pairing_system.Swiss_system()
 
     def create_turnament(self):
-        prompt = input("Souhaitez vous créer un nouveau tournoi ? (y/n)\n").lower()
-        if prompt == "y":
+        prompt = "Souhaitez vous créer un nouveau tournoi ? (y/n)\n"
+        print(prompt)
+        choice = user_input.user_input()
+        if choice == "y":
             new_turnament = tournoi.Tournoi()
             new_turnament.set_name()
             new_turnament.set_date()
             new_turnament.set_place()
             new_turnament.set_number_rounds()
             new_turnament.set_time_mode()
+            self.select_players_to_add(new_turnament)
             # players_list = select_players_to_add()
             # new_turnament.add_players(players_list)
             return new_turnament
-        else:
+        elif choice == "n":
             pass
+        else:
+            message = "Commande non valide."
+            print(message)
+            self.create_turnament()
 
-    def select_players_to_add(self):
-        potential_player = []
+    def select_players_to_add(self, Tournoi):
+        # potential_player = []
         selected_player = []
         players_list = []
         adding_player = True
 
-        prompt = input(
-            "Voulez-vous ajouter des joueurs dans ce tournoi ? (y/n)\n"
-        ).lower()
+        prompt = "Voulez-vous ajouter des joueurs dans ce tournoi ? (y/n)\n"
+        print(prompt)
+        choice = user_input.user_input()
 
-        if prompt == "y":
-            # ajouter get doc_id
-            for idx, player in enumerate(JOUEUR_TABLE):
-                name = (player.doc_id, player["last_name"], player["first_name"])
-                print(f"{idx + 1} : {name}")
-                potential_player.append(player)
+        if choice == "y":
+            for player in JOUEUR_TABLE:
+                print(player.doc_id, player["last_name"], player["first_name"])
+                # potential_player.append(player)
 
             while adding_player:
-                selection = input(
-                    "Entrez l'index des joueurs participant au tournoi (pour arrêter n'entrez aucun index et validez):\n"
-                )
-                # if the user press enter without typing anything the input return will be empty : the length of it will 0.
+                prompt = "Entrez l'index des joueurs participant au tournoi (pour arrêter n'entrez aucun index et validez):\n"
+                print(prompt)
+                selection = user_input.user_input()
+                ## if the user press enter without typing anything the input return will be empty : the length of it will 0.
                 if len(selection) > 0:
-                    selected_player.append(potential_player[int(selection) - 1])
+                    selected_player.append(JOUEUR_TABLE.get(doc_id=selection))
                 else:
                     adding_player = False
 
@@ -62,7 +68,8 @@ class Tournoi_controller:
                 new_player.deserialize(player)
                 players_list.append(new_player)
 
-            return players_list
+            Tournoi.players_list = players_list
+            # return players_list
         else:
             pass
 
@@ -123,7 +130,8 @@ class Tournoi_controller:
 
     def run_turnament(self, Tournoi):
         if len(Tournoi.players_list) == 0:
-            Tournoi.players_list = self.select_players_to_add()
+            # Tournoi.players_list = self.select_players_to_add()
+            self.select_players_to_add(Tournoi)
         else:
             pass
 

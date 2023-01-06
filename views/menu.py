@@ -1,5 +1,6 @@
 from views.database import DB_viewer
 from views.rapport import Rapport
+from views.user_input import User_choice
 from controllers.database import Controller_db
 from controllers.turnament import Tournoi_controller
 
@@ -7,18 +8,12 @@ db_viewer = DB_viewer()
 rapport = Rapport()
 controller_db = Controller_db()
 tournoi_controller = Tournoi_controller()
+user_input = User_choice()
 
 
 class Main_menu:
     def __init__(self):
         self.active = True
-
-    def user_input(self):
-        user_input = input()
-        if user_input == "quitter":
-            quit()
-        else:
-            return user_input
 
     def program_selection(self):
         while self.active:
@@ -29,7 +24,7 @@ class Main_menu:
                 "\t2- Gérer les tournois\n"
                 "\t3- Générer un rapport\n"
             )
-            choice = self.user_input()
+            choice = user_input.str_range_input(["1", "2", "3"])
 
             if choice == "1":
                 self.players_program()
@@ -50,7 +45,7 @@ class Main_menu:
                 "\t2 - Ajouter des joueurs\n"
                 "\t3 - Modifier les informations des joueurs\n"
             )
-            choice = self.user_input()
+            choice = user_input.str_range_input(["0", "1", "2", "3"])
             if choice == "1":
                 rapport.show_all_players()
             elif choice == "2":
@@ -74,7 +69,7 @@ class Main_menu:
                 "\t2 - Tournoi déjà existant\n"
                 "\t3 - Ajouter une description\n"
             )
-            choice = self.user_input()
+            choice = user_input.str_range_input(["0", "1", "2", "3"])
             if choice == "1":
                 new_turnament = tournoi_controller.create_turnament()
                 controller_db.save_turnament(new_turnament)
@@ -106,7 +101,7 @@ class Main_menu:
                 "\t1 - Afficher tous les tournois\n"
                 "\t2 - Afficher d'autres informations sur un tournois\n"
             )
-            choice = self.user_input()
+            choice = user_input.str_range_input(["0", "1", "2"])
 
             if choice == "1":
                 rapport.show_all_turnaments()

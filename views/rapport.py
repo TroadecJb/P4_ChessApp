@@ -1,10 +1,13 @@
 from tinydb import TinyDB, Query, where
 from pprint import pprint
 import operator
+from views.user_input import User_choice
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
+
+user_input = User_choice()
 
 
 class Rapport:
@@ -19,16 +22,18 @@ class Rapport:
 
     def get_turnament_players(self, Tournoi):
         if len(Tournoi.players_list) > 0:
-            sorting_choice = input(
-                "Sélectionner le rangement  1- alphabétique | 2- classement\n"
-            )
-            if sorting_choice == "1":
+            prompt = "Sélectionner le rangement  1- alphabétique | 2- classement\n"
+            print(prompt)
+
+            choice = user_input.str_range_input(["1", "2"])
+            if choice == "1":
                 liste = sorted(
                     Tournoi.players_list, key=operator.attrgetter("last_name")
                 )
-            elif sorting_choice == "2":
+            elif choice == "2":
                 liste = sorted(Tournoi.players_list, key=operator.attrgetter("rank"))
             pprint(liste)
+            # Ajouter retour menu ?
         else:
             message = "Ce tournoi ne possède pas de joueurs."
             pprint(message)
