@@ -1,4 +1,4 @@
-class DB_viewer:
+class DbViewer:
     # def ask_player_info(self):
     #     last_name = input("Entrez le nom de famille du joueur :\n").lower()
     #     first_name = input("Entrez le prénom du joueur :\n").lower()
@@ -14,6 +14,7 @@ class DB_viewer:
     #     return info
 
     def new_player_info(self):
+        """Ask user for infos about a player, returns a dict with the infos."""
         new_player_list = []
         adding_entry = True
 

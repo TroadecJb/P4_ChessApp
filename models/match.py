@@ -1,9 +1,3 @@
-from tinydb import TinyDB, Query, where
-
-DB = TinyDB("db.json")
-JOUEUR_TABLE = DB.table("joueurs")
-
-
 class Match:
     """Class for a match"""
 

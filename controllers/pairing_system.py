@@ -1,7 +1,7 @@
 import operator
 
 
-class Swiss_system:
+class SwissSystem:
     def generate_inital_pairs(self, players_list):
         """
         Pair the players by their rank: top-half[i] with bottom-half[i].

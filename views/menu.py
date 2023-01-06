@@ -1,13 +1,13 @@
-from views.database import DB_viewer
+from views.database import DbViewer
 from views.rapport import Rapport
 from views.user_input import User_choice
-from controllers.database import Controller_db
-from controllers.turnament import Tournoi_controller
+from controllers.database import ControllerDb
+from controllers.turnament import TournoiController
 
-db_viewer = DB_viewer()
+db_viewer = DbViewer()
 rapport = Rapport()
-controller_db = Controller_db()
-tournoi_controller = Tournoi_controller()
+controller_db = ControllerDb()
+tournoi_controller = TournoiController()
 user_input = User_choice()
 
 

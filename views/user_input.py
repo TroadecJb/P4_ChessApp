@@ -1,4 +1,4 @@
-class User_choice:
+class UserChoice:
     """Check for user input."""
 
     def __init__(self):

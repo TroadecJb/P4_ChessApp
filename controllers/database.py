@@ -1,16 +1,16 @@
 from tinydb import TinyDB, Query, where
 from models import tournoi, joueur, tour, match, exceptions
-from views.user_input import User_choice
+from views.user_input import UserChoice
 import operator
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
 
-user_input = User_choice()
+user_input = UserChoice()
 
 
-class Controller_db:
+class ControllerDb:
     """exchange between DB and program"""
 
     def get_doc_id(self, table):

@@ -1,20 +1,20 @@
 from tinydb import TinyDB
 from models import tournoi, tour, match, joueur
 from controllers import pairing_system
-from controllers.database import Controller_db
-from views.user_input import User_choice
+from controllers.database import ControllerDb
+from views.user_input import UserChoice
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
 
-controller_db = Controller_db()
-user_input = User_choice()
+controller_db = ControllerDb()
+user_input = UserChoice()
 
 
-class Tournoi_controller:
+class TournoiController:
     def __init__(self):
-        self.pair_system = pairing_system.Swiss_system()
+        self.pair_system = pairing_system.SwissSystem()
 
     def create_turnament(self):
         prompt = "Souhaitez vous créer un nouveau tournoi ? (y/n)\n"

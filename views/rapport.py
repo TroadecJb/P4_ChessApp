@@ -1,13 +1,13 @@
-from tinydb import TinyDB, Query, where
+from tinydb import TinyDB
 from pprint import pprint
 import operator
-from views.user_input import User_choice
+from views.user_input import UserChoice
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
 
-user_input = User_choice()
+user_input = UserChoice()
 
 
 class Rapport:
