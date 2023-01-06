@@ -1,3 +1,8 @@
+from views.user_input import UserChoice
+
+user_input = UserChoice()
+
+
 class Joueur:
     """Class for a player"""
 
@@ -61,23 +66,31 @@ class Joueur:
         self.set_points()
 
     def set_first_name(self):
-        player_fisrt_name = input("Entrez le prénom du joueur:\n")
+        prompt = "\nEntrez le prénom du joueur:"
+        print(prompt)
+        player_fisrt_name = user_input.user_input()
         self.first_name = player_fisrt_name
 
     def set_last_name(self):
-        player_last_name = input("Entrez le nom du joueur :\n")
+        prompt = "\nEntrez le nom du joueur :"
+        print(prompt)
+        player_last_name = user_input.user_input()
         self.last_name = player_last_name
 
     def set_birth_date(self):
-        player_birth_date = input(
-            "Entrez la date de naissance du joueur (dd/mm/yyyy):\n"
-        )
+        prompt = "\nEntrez la date de naissance du joueur (dd/mm/yyyy):"
+        print(prompt)
+        player_birth_date = user_input.user_input()
         self.birth_date = player_birth_date
 
     def set_rank(self):
-        player_rank = input("Entrez le classement du joueur :\n")
+        prompt = "\nEntrez le classement du joueur :"
+        print(prompt)
+        player_rank = user_input.int_input()
         self.rank = player_rank
 
     def set_points(self):
-        player_points = input("Entrez les points du joueur:\n")
+        prompt = "\nEntrez les points du joueur:"
+        print(prompt)
+        player_points = user_input.int_input()
         self.points = player_points

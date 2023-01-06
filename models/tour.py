@@ -40,8 +40,6 @@ class Tour:
             x = match.serialize()
             matchs_list.append(x)
 
-        # matchs_list = [match.serialize() for match in self.matchs_list]
-
         self.serialized = {
             "round_index": self.index,
             "matchs_list": matchs_list,
@@ -52,7 +50,6 @@ class Tour:
         return self.serialized
 
     def deserialize(self, data):
-        # self.index = data["index"]
         self.matchs_list = data["matchs_list"]
         self.start_time = data["start_time"]
         self.end_time = data["end_time"]

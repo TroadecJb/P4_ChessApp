@@ -1,3 +1,8 @@
+from views.user_input import UserChoice
+
+user_input = UserChoice()
+
+
 class Match:
     """Class for a match"""
 
@@ -38,13 +43,14 @@ class Match:
         self.match_result = data["match_result"]
 
     def set_result(self):
-        prompt = input(
-            f"Indiquer le résultat pour le match {self.index} ? (y/n)\n"
-        ).lower()
-        if prompt == "y":
-            result = input(
-                f"Entrez le numéro du joueur gagnant, 1 : {self.player_1} | 2 : {self.player_2} | 3 : Match nul \n"
-            )
+        prompt = f"Indiquer le résultat pour le match {self.index} ? (y/n)\n"
+        print(prompt)
+        choice = user_input.user_input()
+
+        if choice == "y":
+            prompt = f"Entrez le numéro du joueur gagnant, 1 : {self.player_1} | 2 : {self.player_2} | 3 : Match nul \n"
+            print(prompt)
+            result = user_input.str_range_input(["1", "2", "3"])
             if result == "1":
                 self.player_1.points += Match.victory
                 self.player_2.points += Match.loss
@@ -57,8 +63,6 @@ class Match:
                 self.player_1.points += Match.draw
                 self.player_2.points += Match.draw
                 self.match_result = "match nul"
-            else:
-                print("Entrez 1, 2 ou 3.")
             self.serialize()
         else:
             pass

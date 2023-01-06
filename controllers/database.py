@@ -31,20 +31,20 @@ class ControllerDb:
 
     def get_players_from_DB(self):
         """Retrieve player from database, based on user selection, returns the list of class Joueur"""
+        players_ids = self.get_doc_id(JOUEUR_TABLE)
         players_list = []
         index_players = []
         adding_player = True
 
+        prompt = "Entrez l'index des joueurs que vous souhaitez modifier :\n(pour arrêter n'entrez aucun index et validez]\n"
+        print(prompt)
+
         for player in JOUEUR_TABLE:
             print(f"{player.doc_id} -", player["last_name"], player["first_name"])
 
-        players_ids = self.get_doc_id(JOUEUR_TABLE)
-
         while adding_player:
-            prompt = "Entrez l'index des joueurs que vous souhaitez modifier :\n(pour arrêter n'entrez aucun index et validez]\n"
-            print(prompt)
             choice = user_input.int_range_input(players_ids)
-            if len(choice) > 0:
+            if choice:
                 index_players.append(choice)
             else:
                 adding_player = False
@@ -59,7 +59,6 @@ class ControllerDb:
 
     def retrieve_turnament(self):
         """Returns serialized turnament from table."""
-        turnament_list = []
         selected_turnament = ""
         turnament_data = TOURNOI_TABLE.all()
 
@@ -76,12 +75,17 @@ class ControllerDb:
             print(prompt, "\n")
 
             choice = user_input.int_range_input(turnament_ids)
-            selected_turnament = TOURNOI_TABLE.get(doc_id=choice)
-
-            return selected_turnament
+            if choice:
+                selected_turnament = TOURNOI_TABLE.get(doc_id=choice)
+                return selected_turnament
+            else:
+                message = "Aucun tounroi sélectionné."
+                print(message)
+                return
         else:
             message = "Aucun tournoi dans la base de donnée."
             print(message)
+            return None
 
     def deserialize_turnament(self, turnament_serialized):
         """Deserializes turnament, deserializes every players, rounds and matchs."""

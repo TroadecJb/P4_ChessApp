@@ -1,4 +1,8 @@
+from views.user_input import UserChoice
+
 CHESS_TIME_MODE = ["bullet", "blitz", "coup rapide"]
+
+user_input = UserChoice()
 
 
 class Tournoi:
@@ -24,15 +28,22 @@ class Tournoi:
         return f"\nTournoi(nom={self.name}, lieu={self.place}, date={self.date}, nombre_de_tour={self.number_of_rounds}, mode={self.time_mode}, participants={self.players_list}."
 
     def set_name(self):
-        turnament_name = input("Entrez le nom du tournoi :\n")
+        prompt = "Entrez le nom du tournoi :\n"
+        print(prompt)
+        turnament_name = user_input.user_input()
+
         self.name = turnament_name
 
     def set_date(self):
-        turnament_date = input("Entrez la date du tournoi (dd/mm/yyyy):\n")
-        self.date = str(turnament_date)
+        prompt = "Entrez la date du tournoi (dd/mm/yyyy):\n"
+        print(prompt)
+        turnament_date = user_input.user_input()
+        self.date = turnament_date
 
     def set_place(self):
-        turnament_place = input("Entrez le lieu du tournoi :\n")
+        prompt = "Entrez le lieu du tournoi :\n"
+        print(prompt)
+        turnament_place = user_input.user_input()
         self.place = turnament_place
 
     def set_time_mode(self):
@@ -41,34 +52,33 @@ class Tournoi:
                 f"Sélectionner le mode de Contrôle du temps :\n 1 - Bullet\n 2 - Blitz\n 3 - Coup Rapide\n"
             )
         )
-        if choice < 4:
-            self.time_mode = CHESS_TIME_MODE[choice - 1]
-        else:
-            self.time_mode = "pas de choix effectué"
+        choice = user_input.int_range_input(["1", "2", "3"])
+        self.time_mode = CHESS_TIME_MODE[choice - 1]
 
     def set_number_rounds(self):
-        prompt = input(
+        prompt = (
             "Le nombre de tour par défaut est de 4, voulez-vous le modifier ? (y/n)\n"
-        ).lower()
-        if prompt == "y":
-            choice = input("Indiquez le nombre de tour pour ce tournoi :\n")
-            try:
-                int(choice)
-                self.number_of_rounds = int(choice)
-            except ValueError:
-                print("Entrez un nombre pour le nombre de tour.\n")
-                self.set_number_rounds()
+        )
+        print(prompt)
+        choice = user_input.user_input()
+        if choice == "y":
+            prompt = "Indiquez le nombre de tour pour ce tournoi :\n"
+            print(prompt)
+            choice = user_input.int_input()
         else:
             self.number_of_rounds = 4
-            print("\t", self.number_of_rounds, type(self.number_of_rounds))
 
     def add_players(self, selected_player):
         self.players_list = selected_player
 
     def add_description(self):
-        prompt = input("Voulez-vous ajotuer une description ? (y/n)\n").lower()
-        if prompt == "y":
-            description = input("Entrez votre description :\n")
+        prompt = "Voulez-vous ajotuer une description ? (y/n)\n"
+        print(prompt)
+        choice = user_input.user_input()
+        if choice == "y":
+            prompt = "Entrez votre description :\n"
+            print(prompt)
+            description = user_input.user_input()
             self.description = description
         else:
             pass
@@ -82,12 +92,6 @@ class Tournoi:
         for r in self.rounds_list:
             x = r.serialize()
             rounds_list.append(x)
-
-        # matchs_list = []
-        # for m in self.matchs_list:
-        #     print(type(m), m)
-        #     x = m.serialize()
-        #     matchs_list.append(x)
 
         self.serialized = {
             "name": self.name,

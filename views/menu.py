@@ -1,6 +1,6 @@
 from views.database import DbViewer
 from views.rapport import Rapport
-from views.user_input import User_choice
+from views.user_input import UserChoice
 from controllers.database import ControllerDb
 from controllers.turnament import TournoiController
 
@@ -8,7 +8,7 @@ db_viewer = DbViewer()
 rapport = Rapport()
 controller_db = ControllerDb()
 tournoi_controller = TournoiController()
-user_input = User_choice()
+user_input = UserChoice()
 
 
 class Main_menu:
@@ -31,7 +31,7 @@ class Main_menu:
             elif choice == "2":
                 self.turnament_program()
             elif choice == "3":
-                self.report_generator()
+                self.report_program()
             else:
                 print("\tPour quitter entrer 'quitter'.")
                 self.program_selection()
@@ -84,15 +84,16 @@ class Main_menu:
                     pass
             elif choice == "3":
                 selected_turnament = controller_db.retrieve_turnament()
-                selected_turnament = controller_db.deserialize_turnament(
-                    selected_turnament
-                )
-                selected_turnament.add_description()
-                controller_db.update_turnament(selected_turnament)
+                if selected_turnament:
+                    selected_turnament = controller_db.deserialize_turnament(
+                        selected_turnament
+                    )
+                    selected_turnament.add_description()
+                    controller_db.update_turnament(selected_turnament)
             elif choice == "0":
                 self.program_selection()
 
-    def report_generator(self):
+    def report_program(self):
         """Affiche différentes informations concernant la base de données (Joueurs, Tournois, Tours, Matchs)"""
         while self.active:
             prompt = print(
@@ -107,28 +108,29 @@ class Main_menu:
                 rapport.show_all_turnaments()
             elif choice == "2":
                 selected_turnament = controller_db.retrieve_turnament()
-                selected_turnament = controller_db.deserialize_turnament(
-                    selected_turnament
-                )
-                prompt = print(
-                    "\n- - - Menu Principal / Rapports / Autres information du tournoi - - -\n"
-                    "\t1 - Afficher la liste des joueurs\n"
-                    "\t2 - Afficher les tours\n"
-                    "\t3 - afficher les matchs\n"
-                    "\t0 - Revenir en arrière\n"
-                )
-                choice = self.user_input()
-                if choice == "1":
-                    rapport.get_turnament_players(selected_turnament)
+                if selected_turnament:
+                    selected_turnament = controller_db.deserialize_turnament(
+                        selected_turnament
+                    )
+                    prompt = print(
+                        "\n- - - Menu Principal / Rapports / Autres information du tournoi - - -\n"
+                        "\t1 - Afficher la liste des joueurs\n"
+                        "\t2 - Afficher les tours\n"
+                        "\t3 - afficher les matchs\n"
+                        "\t0 - Revenir en arrière\n"
+                    )
+                    choice = self.user_input()
+                    if choice == "1":
+                        rapport.get_turnament_players(selected_turnament)
 
-                elif choice == "2":
-                    rapport.get_all_rounds(selected_turnament)
+                    elif choice == "2":
+                        rapport.get_all_rounds(selected_turnament)
 
-                elif choice == "3":
-                    rapport.get_all_matchs(selected_turnament)
+                    elif choice == "3":
+                        rapport.get_all_matchs(selected_turnament)
 
-                elif choice == "0":
-                    self.report_generator()
+                    elif choice == "0":
+                        self.report_generator()
 
             elif choice == "0":
                 self.program_selection()
