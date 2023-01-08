@@ -8,6 +8,8 @@ class UserChoice:
         choice = input()
         if choice.lower() == "quitter":
             quit()
+        elif choice.lower() == "annuler":
+            pass
         else:
             return choice.lower()
 
@@ -21,6 +23,19 @@ class UserChoice:
                 print("Veuillez entrer un nombre.")
                 return self.int_input()
             return int_choice
+        else:
+            return
+
+    def float_input(self):
+        """Check if user input is type(int). Returns input type(int)."""
+        choice = self.user_input()
+        if choice:
+            try:
+                float_choice = float(choice)
+            except ValueError:
+                print("Veuillez entrer un nombre.")
+                return self.float_input()
+            return float_choice
         else:
             return
 

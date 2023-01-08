@@ -1,7 +1,6 @@
-from tinydb import TinyDB, Query, where
+from tinydb import TinyDB
 from models import tournoi, joueur, tour, match, exceptions
 from views.user_input import UserChoice
-import operator
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
@@ -29,8 +28,26 @@ class ControllerDb:
         """Add to players_data to the table JOUEUR_TABLE"""
         JOUEUR_TABLE.insert_multiple(players_data)
 
+    def get_player_from_DB(self):
+        """Retrieve one player from database, based on user selection."""
+        players_ids = self.get_doc_id(JOUEUR_TABLE)
+
+        prompt = "Entrez l'index du joueur que vous souhaitez modifier :\n"
+        print(prompt)
+
+        for player in JOUEUR_TABLE:
+            print(f"\t{player.doc_id} -", player["last_name"], player["first_name"])
+
+        choice = user_input.int_range_input(players_ids)
+
+        player_data = JOUEUR_TABLE.get(doc_id=choice)
+        player = joueur.Joueur()
+        player.deserialize(player_data)
+
+        return player
+
     def get_players_from_DB(self):
-        """Retrieve player from database, based on user selection, returns the list of class Joueur"""
+        """Retrieve multiple players from database, based on user selection, returns the list of class Joueur"""
         players_ids = self.get_doc_id(JOUEUR_TABLE)
         players_list = []
         index_players = []
@@ -144,25 +161,55 @@ class ControllerDb:
 
     def save_turnament(self, Tournoi):
         """From class object to serialize attr, stored in table."""
-        Tournoi.serialize()
-        TOURNOI_TABLE.insert(Tournoi.serialized)
+        serialized = Tournoi.serialize()
+        TOURNOI_TABLE.insert(serialized)
 
     def save_player(self, player):
         """From class object to serialize attr, stored in table."""
         if type(player) == list:
             for i in player:
-                i.serialize()
-                JOUEUR_TABLE.insert(i.serialized)
+                serialized = i.serialize()
+                JOUEUR_TABLE.insert(serialized)
         else:
-            player.serialize()
-            JOUEUR_TABLE.insert(player.serialized)
+            serialized = player.serialize()
+            JOUEUR_TABLE.insert(serialized)
 
     def update_player(self, x):
         """Update JOUEUR_TABLE with serialized player's data, based on doc_id."""
-        x.serialize()
-        JOUEUR_TABLE.update(x.serialized, doc_ids=[x.doc_id])
+        serialized = x.serialize()
+        JOUEUR_TABLE.update(serialized, doc_ids=[x.doc_id])
 
     def update_turnament(self, Tournoi):
         """Update TOURNOI_TABLE with serialized turnament's data, based on doc_id."""
-        Tournoi.serialize()
-        TOURNOI_TABLE.update(Tournoi.serialized, doc_ids=[Tournoi.doc_id])
+        serialized = Tournoi.serialize()
+        TOURNOI_TABLE.update(serialized, doc_ids=[Tournoi.doc_id])
+
+    def remove_player(self):
+        players_list = JOUEUR_TABLE.all()
+        players_ids = self.get_doc_id(JOUEUR_TABLE)
+
+        print("\nEntrer l'index du joueur que vous souhaitez supprimer :")
+        for i in players_list:
+            print(
+                "\t", i.doc_id, " - ", i["last_name"], i["first_name"], i["birth_date"]
+            )
+        choice = user_input.int_range_input(players_ids)
+        if choice:
+            JOUEUR_TABLE.remove(doc_ids=[choice])
+            print("Joueur supprimé.")
+        else:
+            print("Pas de joueur supprimé.")
+
+    def remove_turnament(self):
+        turnaments_list = TOURNOI_TABLE.all()
+        turnaments_ids = self.get_doc_id(TOURNOI_TABLE)
+
+        print("\nEntrez l'index du tournoi que vous souhaitez supprimer:")
+        for i in turnaments_list:
+            print("\t", i.doc_id, " - ", i["name"], i["place"], i["date"])
+        choice = user_input.int_range_input(turnaments_ids)
+        if choice:
+            TOURNOI_TABLE.remove(doc_ids=[choice])
+            print("Tounoi supprimé.")
+        else:
+            print("Pas de tournoi supprimé.")

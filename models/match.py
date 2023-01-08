@@ -12,28 +12,29 @@ class Match:
 
     def __init__(self, index):
         self.index = index
-        # self.players_list = ""
         self.player_1 = ""
         self.player_2 = ""
         self.match_result = ""
-        self.serialized = {
-            "match_index": "",
-            "player_1": "",
-            "player_2": "",
-            "match_result": "",
-        }
+        # self.serialized = {
+        #     "match_index": "",
+        #     "player_1": "",
+        #     "player_2": "",
+        #     "match_result": "",
+        # }
 
     def __repr__(self):
         return f"{self.index}\njoueurs : {self.player_1}, {self.player_2}\n{self.match_result}"
 
     def serialize(self):
-        self.serialized = {
-            "match_index": self.index,
-            "player_1": self.player_1.doc_id,
-            "player_2": self.player_2.doc_id,
-            "match_result": self.match_result,
-        }
-        return self.serialized
+        # self.serialized = {
+        #     "match_index": self.index,
+        #     "player_1": self.player_1.doc_id,
+        #     "player_2": self.player_2.doc_id,
+        #     "match_result": self.match_result,
+        # }
+        # return self.serialized
+        serialized = vars(self)
+        return serialized
 
     def deserialize(self, data):  # chelou
         self.index = data["index"]

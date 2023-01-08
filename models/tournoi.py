@@ -1,6 +1,6 @@
 from views.user_input import UserChoice
 
-CHESS_TIME_MODE = ["bullet", "blitz", "coup rapide"]
+CHESS_TIME_MODE = ["", "bullet", "blitz", "coup rapide"]
 
 user_input = UserChoice()
 
@@ -19,7 +19,7 @@ class Tournoi:
         self.time_mode = ""
         self.description = ""
         self.doc_id = ""
-        self.serialized = {}
+        # self.serialized = {}
 
     def __str__(self):
         return f"\n{self.name} a lieu à {self.place}, le {self.date}.\nLes participants sont {self.players_list}.\nC'est en tournoi en {self.number_of_rounds} tour(s) avec un contrôle de temps {self.time_mode}."
@@ -52,8 +52,8 @@ class Tournoi:
                 f"Sélectionner le mode de Contrôle du temps :\n 1 - Bullet\n 2 - Blitz\n 3 - Coup Rapide\n"
             )
         )
-        choice = user_input.int_range_input(["1", "2", "3"])
-        self.time_mode = CHESS_TIME_MODE[choice - 1]
+        choice = user_input.int_range_input([1, 2, 3])
+        self.time_mode = CHESS_TIME_MODE[choice]
 
     def set_number_rounds(self):
         prompt = (
@@ -65,11 +65,16 @@ class Tournoi:
             prompt = "Indiquez le nombre de tour pour ce tournoi :\n"
             print(prompt)
             choice = user_input.int_input()
+            self.number_of_rounds = choice
         else:
             self.number_of_rounds = 4
 
     def add_players(self, selected_player):
-        self.players_list = selected_player
+        self.players_list.append(selected_player)
+
+    def redo_players(self, selec_player):
+        self.players_list = []
+        self.players_list
 
     def add_description(self):
         prompt = "Voulez-vous ajotuer une description ? (y/n)\n"
@@ -93,17 +98,28 @@ class Tournoi:
             x = r.serialize()
             rounds_list.append(x)
 
-        self.serialized = {
-            "name": self.name,
-            "place": self.place,
-            "date": self.date,
-            "number_of_rounds": self.number_of_rounds,
-            "rounds_list": rounds_list,
-            "players_list": players_list,
-            "matchs_list": self.matchs_list,
-            "time_mode": self.time_mode,
-            "description": self.description,
-            "doc_id": self.doc_id,
-        }
+        # self.serialized = {
+        #     "name": self.name,
+        #     "place": self.place,
+        #     "date": self.date,
+        #     "number_of_rounds": self.number_of_rounds,
+        #     "rounds_list": rounds_list,
+        #     "players_list": players_list,
+        #     "matchs_list": self.matchs_list,
+        #     "time_mode": self.time_mode,
+        #     "description": self.description,
+        #     "doc_id": self.doc_id,
+        # }
 
-        return self.serialized
+        # return self.serialized
+        serialized = vars(self)
+        serialized["rounds_list"] = rounds_list
+        serialized["players_list"] = players_list
+        return serialized
+
+    def update_info(self):
+        self.set_name()
+        self.set_date()
+        self.set_place()
+        self.set_time_mode()
+        self.set_number_rounds()

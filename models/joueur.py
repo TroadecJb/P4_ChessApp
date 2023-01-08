@@ -13,7 +13,7 @@ class Joueur:
         self.birth_date = ""
         self.rank = 0
         self.points = 0
-        self.serialized = ""
+        # self.serialized = ""
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
@@ -22,11 +22,13 @@ class Joueur:
         return f"{self.last_name} {self.first_name}, {self.birth_date}, rank: {self.rank}, points: {self.points}"
 
     def update_rank(self):  # A deplacer dans le controleur DB
-        current_rank = self.rank
-        print(f"{self.name}, classement actuel : {current_rank}")
-        prompt = input(f"Mettre à jour le classement de {self.name} ? (y/n)\n").lower()
-        if prompt == "y":
-            new_rank = float(input("Indiquez le nouveau classement de {self.name} :\n"))
+        print(f"{self.name}, classement actuel : {self.rank}")
+        prompt = f"\nMettre à jour le classement de {self.name} ? (y/n)"
+        print(prompt)
+        choice = user_input.user_input()
+        if choice == "y":
+            prompt = "Indiquez le nouveau classement de {self.name} :\n"
+            new_rank = user_input.int_input()
             self.rank = new_rank
         else:
             pass
@@ -39,24 +41,25 @@ class Joueur:
         self.points = 0
 
     def serialize(self):
-        self.serialized = {
-            "doc_id": self.doc_id,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "birth_date": self.birth_date,
-            "rank": self.rank,
-            "points": self.points,
-        }
-        return self.serialized
+        # self.serialized = {
+        #     "doc_id": self.doc_id,
+        #     "first_name": self.first_name,
+        #     "last_name": self.last_name,
+        #     "birth_date": self.birth_date,
+        #     "rank": self.rank,
+        #     "points": self.points,
+        # }
+        # return self.serialized
+        serialized = vars(self)
+        return serialized
 
     def deserialize(self, player_db):
         self.doc_id = player_db.doc_id
         self.first_name = player_db["first_name"]
         self.last_name = player_db["last_name"]
-        self.name = f"{self.first_name} {self.last_name}"
         self.birth_date = player_db["birth_date"]
         self.rank = int(player_db["rank"])
-        self.points = int(player_db["points"])
+        self.points = float(player_db["points"])
 
     def update_info(self):
         self.set_first_name()
@@ -64,6 +67,13 @@ class Joueur:
         self.set_birth_date()
         self.set_rank()
         self.set_points()
+
+    def select_info_to_update(self):
+        prompt = "\nSélectionner l'information à modifier:"
+        attributes = vars(self)
+        print(prompt)
+        for idx, key, value in enumerate(attributes.items()):
+            print({idx + 1, key, value})
 
     def set_first_name(self):
         prompt = "\nEntrez le prénom du joueur:"
@@ -92,5 +102,5 @@ class Joueur:
     def set_points(self):
         prompt = "\nEntrez les points du joueur:"
         print(prompt)
-        player_points = user_input.int_input()
+        player_points = user_input.float_input()
         self.points = player_points

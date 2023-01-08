@@ -1,3 +1,8 @@
+from views.user_input import UserChoice
+
+user_input = UserChoice()
+
+
 class DbViewer:
     # def ask_player_info(self):
     #     last_name = input("Entrez le nom de famille du joueur :\n").lower()
@@ -19,13 +24,21 @@ class DbViewer:
         adding_entry = True
 
         while adding_entry:
-            last_name = input("Indiquez le nom du joueur :\n").lower()
-            first_name = input("Indiquez le prénom du joueur :\n").lower()
-            name = f"{first_name} {last_name}"
-            birth_date = input(
-                f"Indiquez la date de naissance (dd/mm/yyyy) :\n"
-            ).lower()
-            rank = input(f"Indiquez le classement de {name} :\n").lower()
+            prompt = "\nIndiquez le nom du joueur :"
+            print(prompt)
+            last_name = user_input.user_input()
+
+            prompt = "\nIndiquez le prénom du joueur :"
+            print(prompt)
+            first_name = user_input.user_input()
+
+            prompt = "\nIndiquez la date de naissance (dd/mm/yyyy) :"
+            print(prompt)
+            birth_date = user_input.user_input()
+
+            prompt = "\nIndiquez le classement :"
+            print(prompt)
+            rank = user_input.int_input()
 
             new_player = {
                 "first_name": first_name,
@@ -36,10 +49,10 @@ class DbViewer:
             }
             new_player_list.append(new_player)
 
-            prompt = input(
-                "Ajouter un autre joueur à la base de donnée ? (y/n)\n"
-            ).lower()
-            if prompt == "y":
+            prompt = "\nAjouter un autre joueur à la base de donnée ? (y/n)"
+            print(prompt)
+            choice = user_input.user_input()
+            if choice == "y":
                 adding_entry = True
             else:
                 adding_entry = False
