@@ -15,10 +15,15 @@ class Rapport:
         SORTING_LIST = ("alpha", "rank")
 
     def show_all_players(self):
-        print("\nListe des joueurs :\n")
-        for player in JOUEUR_TABLE:
-            readable = f'{player["last_name"].capitalize()} {player["first_name"].capitalize()}, classement: {player["rank"]}'
-            print(readable, sep="\n")
+        players_list = JOUEUR_TABLE.all()
+        if players_list:
+            print("\nListe des joueurs :\n")
+            for player in JOUEUR_TABLE:
+                readable = f'{player["last_name"].capitalize()} {player["first_name"].capitalize()}, classement: {player["rank"]}'
+                print(readable, sep="\n")
+        else:
+            print("Aucun joueur dans la base donnée.")
+            pass
 
     def get_turnament_players(self, Tournoi):
         if len(Tournoi.players_list) > 0:
@@ -42,13 +47,12 @@ class Rapport:
         turnament_data = TOURNOI_TABLE.all()
         if turnament_data:
             for turnament in turnament_data:
-                readable = (
-                    f'{turnament["name"]}, {turnament["date"]}, {turnament["place"]}'
-                )
+                readable = f'{turnament["name"]}, {turnament["date"]}, {turnament["place"]},\n{turnament["description"]}'
                 print(readable, sep="\n")
         else:
             message = "Aucun tournoi dans la base de donnée."
             print(message)
+            pass
 
     def get_all_rounds(self, Tournoi):
         if len(Tournoi.rounds_list) > 0:

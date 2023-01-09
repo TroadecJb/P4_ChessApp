@@ -15,9 +15,11 @@ user_input = UserChoice()
 class TournoiController:
     def __init__(self):
         self.pair_system = pairing_system.SwissSystem()
+        self.players_db = JOUEUR_TABLE.all()
+        self.tournoi_db = TOURNOI_TABLE.all()
 
     def create_turnament(self):
-        prompt = "Souhaitez vous créer un nouveau tournoi ? (y/n)\n"
+        prompt = "\nSouhaitez vous créer un nouveau tournoi ? (y/n)"
         print(prompt)
         choice = user_input.user_input()
         if choice == "y":
@@ -39,38 +41,40 @@ class TournoiController:
             self.create_turnament()
 
     def select_players_to_add(self, Tournoi):
-        # potential_player = []
         selected_player = []
         players_list = []
         adding_player = True
 
-        prompt = "Voulez-vous ajouter des joueurs dans ce tournoi ? (y/n)\n"
-        print(prompt)
-        choice = user_input.user_input()
+        if self.players_db:
+            prompt = "\nVoulez-vous ajouter des joueurs dans ce tournoi ? (y/n)"
+            print(prompt)
+            choice = user_input.user_input()
+            players_ids = controller_db.get_doc_id(JOUEUR_TABLE)
+            print(players_ids, type(players_ids[0]))
 
-        if choice == "y":
-            for player in JOUEUR_TABLE:
-                print(player.doc_id, player["last_name"], player["first_name"])
-                # potential_player.append(player)
+            if choice == "y":
+                for player in self.players_db:
+                    print(player.doc_id, player["last_name"], player["first_name"])
 
-            while adding_player:
-                prompt = "Entrez l'index des joueurs participant au tournoi (pour arrêter n'entrez aucun index et validez):\n"
-                print(prompt)
-                selection = user_input.user_input()
-                ## if the user press enter without typing anything the input return will be empty : the length of it will 0.
-                if len(selection) > 0:
-                    selected_player.append(JOUEUR_TABLE.get(doc_id=selection))
-                else:
-                    adding_player = False
+                while adding_player:
+                    prompt = "\nEntrez l'index des joueurs participant au tournoi (pour arrêter n'entrez aucun index et validez):"
+                    print(prompt)
+                    selection = user_input.int_range_input(players_ids)
+                    if selection:
+                        selected_player.append(JOUEUR_TABLE.get(doc_id=selection))
+                    else:
+                        adding_player = False
 
-            for player in selected_player:
-                new_player = joueur.Joueur()
-                new_player.deserialize(player)
-                players_list.append(new_player)
+                for player in selected_player:
+                    new_player = joueur.Joueur()
+                    new_player.deserialize(player)
+                    players_list.append(new_player)
 
-            Tournoi.players_list = players_list
-            # return players_list
+                Tournoi.players_list.append(players_list)
+            else:
+                pass
         else:
+            print("Aucun joueur dans la base de données.")
             pass
 
     def generate_first_round(self, Tournoi):
@@ -130,8 +134,7 @@ class TournoiController:
 
     def run_turnament(self, Tournoi):
         if len(Tournoi.players_list) == 0:
-            # Tournoi.players_list = self.select_players_to_add()
-            self.select_players_to_add(Tournoi)
+            Tournoi.players_list = self.select_players_to_add()
         else:
             pass
 

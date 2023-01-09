@@ -28,41 +28,44 @@ class Tournoi:
         return f"\nTournoi(nom={self.name}, lieu={self.place}, date={self.date}, nombre_de_tour={self.number_of_rounds}, mode={self.time_mode}, participants={self.players_list}."
 
     def set_name(self):
-        prompt = "Entrez le nom du tournoi :\n"
+        prompt = "\nEntrez le nom du tournoi :"
         print(prompt)
         turnament_name = user_input.user_input()
 
         self.name = turnament_name
 
     def set_date(self):
-        prompt = "Entrez la date du tournoi (dd/mm/yyyy):\n"
+        prompt = "\nEntrez la date du tournoi (dd/mm/yyyy):"
         print(prompt)
         turnament_date = user_input.user_input()
         self.date = turnament_date
 
     def set_place(self):
-        prompt = "Entrez le lieu du tournoi :\n"
+        prompt = "\nEntrez le lieu du tournoi :"
         print(prompt)
         turnament_place = user_input.user_input()
         self.place = turnament_place
 
     def set_time_mode(self):
-        choice = int(
-            input(
-                f"Sélectionner le mode de Contrôle du temps :\n 1 - Bullet\n 2 - Blitz\n 3 - Coup Rapide\n"
-            )
+        prompt = (
+            "\nSélectionner le mode de Contrôle du temps :"
+            "\n1 - Bullet"
+            "\n2 - Blitz"
+            "\n3 - Coup Rapide"
         )
+
+        print(prompt)
         choice = user_input.int_range_input([1, 2, 3])
         self.time_mode = CHESS_TIME_MODE[choice]
 
     def set_number_rounds(self):
         prompt = (
-            "Le nombre de tour par défaut est de 4, voulez-vous le modifier ? (y/n)\n"
+            "\nLe nombre de tour par défaut est de 4, voulez-vous le modifier ? (y/n)"
         )
         print(prompt)
         choice = user_input.user_input()
         if choice == "y":
-            prompt = "Indiquez le nombre de tour pour ce tournoi :\n"
+            prompt = "\nIndiquez le nombre de tour pour ce tournoi :"
             print(prompt)
             choice = user_input.int_input()
             self.number_of_rounds = choice
@@ -74,14 +77,17 @@ class Tournoi:
 
     def redo_players(self, selec_player):
         self.players_list = []
-        self.players_list
+        self.players_list = ""
+
+    def remove_players(self):
+        pass
 
     def add_description(self):
-        prompt = "Voulez-vous ajotuer une description ? (y/n)\n"
+        prompt = "\nVoulez-vous ajotuer une description ? (y/n)"
         print(prompt)
         choice = user_input.user_input()
         if choice == "y":
-            prompt = "Entrez votre description :\n"
+            prompt = "\nEntrez votre description :"
             print(prompt)
             description = user_input.user_input()
             self.description = description

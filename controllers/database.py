@@ -31,20 +31,23 @@ class ControllerDb:
     def get_player_from_DB(self):
         """Retrieve one player from database, based on user selection."""
         players_ids = self.get_doc_id(JOUEUR_TABLE)
+        if players_ids:
+            prompt = "Entrez l'index du joueur que vous souhaitez modifier :\n"
+            print(prompt)
 
-        prompt = "Entrez l'index du joueur que vous souhaitez modifier :\n"
-        print(prompt)
+            for player in JOUEUR_TABLE:
+                print(f"\t{player.doc_id} -", player["last_name"], player["first_name"])
 
-        for player in JOUEUR_TABLE:
-            print(f"\t{player.doc_id} -", player["last_name"], player["first_name"])
+            choice = user_input.int_range_input(players_ids)
 
-        choice = user_input.int_range_input(players_ids)
+            player_data = JOUEUR_TABLE.get(doc_id=choice)
+            player = joueur.Joueur()
+            player.deserialize(player_data)
 
-        player_data = JOUEUR_TABLE.get(doc_id=choice)
-        player = joueur.Joueur()
-        player.deserialize(player_data)
-
-        return player
+            return player
+        else:
+            print("Aucun joueur dans la base de données.")
+            pass
 
     def get_players_from_DB(self):
         """Retrieve multiple players from database, based on user selection, returns the list of class Joueur"""
@@ -186,30 +189,44 @@ class ControllerDb:
 
     def remove_player(self):
         players_list = JOUEUR_TABLE.all()
-        players_ids = self.get_doc_id(JOUEUR_TABLE)
 
-        print("\nEntrer l'index du joueur que vous souhaitez supprimer :")
-        for i in players_list:
-            print(
-                "\t", i.doc_id, " - ", i["last_name"], i["first_name"], i["birth_date"]
-            )
-        choice = user_input.int_range_input(players_ids)
-        if choice:
-            JOUEUR_TABLE.remove(doc_ids=[choice])
-            print("Joueur supprimé.")
+        if players_list:
+            players_ids = self.get_doc_id(JOUEUR_TABLE)
+            print("\nEntrer l'index du joueur que vous souhaitez supprimer :")
+            for i in players_list:
+                print(
+                    "\t",
+                    i.doc_id,
+                    " - ",
+                    i["last_name"],
+                    i["first_name"],
+                    i["birth_date"],
+                )
+            choice = user_input.int_range_input(players_ids)
+            if choice:
+                JOUEUR_TABLE.remove(doc_ids=[choice])
+                print("Joueur supprimé.")
+            else:
+                print("Pas de joueur supprimé.")
         else:
-            print("Pas de joueur supprimé.")
+            print("Aucun joueur dans la base de données.")
+            pass
 
     def remove_turnament(self):
         turnaments_list = TOURNOI_TABLE.all()
-        turnaments_ids = self.get_doc_id(TOURNOI_TABLE)
 
-        print("\nEntrez l'index du tournoi que vous souhaitez supprimer:")
-        for i in turnaments_list:
-            print("\t", i.doc_id, " - ", i["name"], i["place"], i["date"])
-        choice = user_input.int_range_input(turnaments_ids)
-        if choice:
-            TOURNOI_TABLE.remove(doc_ids=[choice])
-            print("Tounoi supprimé.")
+        if turnaments_list:
+            turnaments_ids = self.get_doc_id(TOURNOI_TABLE)
+
+            print("\nEntrez l'index du tournoi que vous souhaitez supprimer:")
+            for i in turnaments_list:
+                print("\t", i.doc_id, " - ", i["name"], i["place"], i["date"])
+            choice = user_input.int_range_input(turnaments_ids)
+            if choice:
+                TOURNOI_TABLE.remove(doc_ids=[choice])
+                print("Tounoi supprimé.")
+            else:
+                print("Pas de tournoi supprimé.")
         else:
-            print("Pas de tournoi supprimé.")
+            print("Aucun tournoi dans la base données.")
+            pass

@@ -68,13 +68,6 @@ class Joueur:
         self.set_rank()
         self.set_points()
 
-    def select_info_to_update(self):
-        prompt = "\nSélectionner l'information à modifier:"
-        attributes = vars(self)
-        print(prompt)
-        for idx, key, value in enumerate(attributes.items()):
-            print({idx + 1, key, value})
-
     def set_first_name(self):
         prompt = "\nEntrez le prénom du joueur:"
         print(prompt)
