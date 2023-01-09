@@ -1,12 +1,12 @@
 from views.database import DbViewer
-from views.rapport import Rapport
 from views.user_input import UserChoice
-from controllers.database import ControllerDb
+from controllers.database import DbController
 from controllers.turnament import TournoiController
+from controllers.rapport import Rapport
 
 db_viewer = DbViewer()
 rapport = Rapport()
-controller_db = ControllerDb()
+controller_db = DbController()
 tournoi_controller = TournoiController()
 user_input = UserChoice()
 
@@ -14,6 +14,7 @@ user_input = UserChoice()
 class Main_menu:
     def __init__(self):
         self.active = True
+        user_input.user_help()
 
     def program_selection(self):
         while self.active:
@@ -54,10 +55,10 @@ class Main_menu:
 
             elif choice == "2":
                 new_players = db_viewer.new_player_info()
-                controller_db.add_players_to_DB(new_players)
+                controller_db.add_players_to_db(new_players)
 
             elif choice == "3":
-                player_to_modify = controller_db.get_player_from_DB()
+                player_to_modify = controller_db.get_one_player_from_db()
                 if player_to_modify:
                     prompt = (
                         "\nSélectionner l'information à modifier:"
@@ -84,12 +85,12 @@ class Main_menu:
                         player_to_modify.update_info()
                     else:
                         pass
-                    controller_db.update_player(player_to_modify)
+                    controller_db.update_player_in_db(player_to_modify)
                 else:
                     pass
 
             elif choice == "4":
-                controller_db.remove_player()
+                controller_db.remove_player_in_db()
 
             elif choice == "0":
                 self.program_selection()
@@ -108,7 +109,7 @@ class Main_menu:
                 "\t5 - Supprimer un tournoi\n"
             )
             print(prompt)
-            choice = user_input.str_range_input(["0", "1", "2", "3", "4"])
+            choice = user_input.str_range_input(["0", "1", "2", "3", "4", "5"])
             if choice == "1":
                 new_turnament = tournoi_controller.create_turnament()
                 controller_db.save_turnament(new_turnament)
@@ -167,7 +168,7 @@ class Main_menu:
                     controller_db.update_turnament(turnament_to_modify)
 
             elif choice == "5":
-                controller_db.remove_turnament()
+                controller_db.remove_turnamentin_db()
             elif choice == "0":
                 self.program_selection()
 
@@ -182,10 +183,13 @@ class Main_menu:
                 "\t3 - Afficher d'autres informations sur un tournois\n"
             )
             choice = user_input.str_range_input(["0", "1", "2", "3"])
+
             if choice == "1":
                 rapport.show_all_players()
+
             elif choice == "2":
                 rapport.show_all_turnaments()
+
             elif choice == "3":
                 selected_turnament = controller_db.retrieve_turnament()
                 if selected_turnament:
@@ -202,16 +206,18 @@ class Main_menu:
                     print(prompt)
                     choice = user_input.user_input()
                     if choice == "1":
-                        rapport.get_turnament_players(selected_turnament)
+                        rapport.show_turnament_players(selected_turnament)
 
                     elif choice == "2":
-                        rapport.get_all_rounds(selected_turnament)
+                        rapport.show_turnament_rounds(selected_turnament)
 
                     elif choice == "3":
-                        rapport.get_all_matchs(selected_turnament)
+                        rapport.show_turnament_matchs(selected_turnament)
 
                     elif choice == "0":
-                        self.report_generator()
+                        self.report_program()
+                else:
+                    print("Pas de tournoi dans la base de donnée.")
 
             elif choice == "0":
                 self.program_selection()

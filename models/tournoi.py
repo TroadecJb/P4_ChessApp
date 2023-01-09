@@ -14,12 +14,12 @@ class Tournoi:
         self.date = ""
         self.number_of_rounds = ""
         self.rounds_list = []
+        self.current_round = ""
         self.players_list = []
         self.matchs_list = []
         self.time_mode = ""
         self.description = ""
         self.doc_id = ""
-        # self.serialized = {}
 
     def __str__(self):
         return f"\n{self.name} a lieu à {self.place}, le {self.date}.\nLes participants sont {self.players_list}.\nC'est en tournoi en {self.number_of_rounds} tour(s) avec un contrôle de temps {self.time_mode}."
@@ -104,20 +104,6 @@ class Tournoi:
             x = r.serialize()
             rounds_list.append(x)
 
-        # self.serialized = {
-        #     "name": self.name,
-        #     "place": self.place,
-        #     "date": self.date,
-        #     "number_of_rounds": self.number_of_rounds,
-        #     "rounds_list": rounds_list,
-        #     "players_list": players_list,
-        #     "matchs_list": self.matchs_list,
-        #     "time_mode": self.time_mode,
-        #     "description": self.description,
-        #     "doc_id": self.doc_id,
-        # }
-
-        # return self.serialized
         serialized = vars(self)
         serialized["rounds_list"] = rounds_list
         serialized["players_list"] = players_list

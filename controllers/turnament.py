@@ -1,27 +1,26 @@
 from tinydb import TinyDB
 from models import tournoi, tour, match, joueur
 from controllers import pairing_system
-from controllers.database import ControllerDb
+from controllers.database import DbController
 from views.user_input import UserChoice
 
 DB = TinyDB("db.json")
 JOUEUR_TABLE = DB.table("joueurs")
 TOURNOI_TABLE = DB.table("tournois")
 
-controller_db = ControllerDb()
+controller_db = DbController()
 user_input = UserChoice()
 
 
 class TournoiController:
     def __init__(self):
         self.pair_system = pairing_system.SwissSystem()
-        self.players_db = JOUEUR_TABLE.all()
-        self.tournoi_db = TOURNOI_TABLE.all()
 
     def create_turnament(self):
         prompt = "\nSouhaitez vous créer un nouveau tournoi ? (y/n)"
         print(prompt)
         choice = user_input.user_input()
+
         if choice == "y":
             new_turnament = tournoi.Tournoi()
             new_turnament.set_name()
@@ -30,38 +29,42 @@ class TournoiController:
             new_turnament.set_number_rounds()
             new_turnament.set_time_mode()
             self.select_players_to_add(new_turnament)
-            # players_list = select_players_to_add()
-            # new_turnament.add_players(players_list)
+            new_turnament.current_round = 0
+            print(new_turnament.players_list)
             return new_turnament
+
         elif choice == "n":
             pass
+
         else:
             message = "Commande non valide."
             print(message)
             self.create_turnament()
 
     def select_players_to_add(self, Tournoi):
+        """Takes user selection and retrieve players from the db and adds it to the turnament players list."""
         selected_player = []
         players_list = []
         adding_player = True
 
-        if self.players_db:
+        if JOUEUR_TABLE.all():
             prompt = "\nVoulez-vous ajouter des joueurs dans ce tournoi ? (y/n)"
             print(prompt)
             choice = user_input.user_input()
             players_ids = controller_db.get_doc_id(JOUEUR_TABLE)
-            print(players_ids, type(players_ids[0]))
 
             if choice == "y":
-                for player in self.players_db:
+                for player in JOUEUR_TABLE.all():
                     print(player.doc_id, player["last_name"], player["first_name"])
 
                 while adding_player:
                     prompt = "\nEntrez l'index des joueurs participant au tournoi (pour arrêter n'entrez aucun index et validez):"
                     print(prompt)
                     selection = user_input.int_range_input(players_ids)
+
                     if selection:
                         selected_player.append(JOUEUR_TABLE.get(doc_id=selection))
+
                     else:
                         adding_player = False
 
@@ -70,12 +73,30 @@ class TournoiController:
                     new_player.deserialize(player)
                     players_list.append(new_player)
 
-                Tournoi.players_list.append(players_list)
+                Tournoi.players_list = players_list
+
             else:
                 pass
+
         else:
             print("Aucun joueur dans la base de données.")
             pass
+
+    def redo_players_list(self, Tournoi):
+        Tournoi.players_list = []
+        print("\n Tous les joueurs ont été de la liste.")
+        self.select_players_to_add()
+
+    def remove_one_player(self, Tournoi):
+        prompt = (
+            "\nSélectionner l'index du joueur que vous souhaitez retirer du tournoi:"
+        )
+        print(prompt)
+        players_ids = [player.doc_id for player in Tournoi.players_list]
+        for player in Tournoi.players_list:
+            print(f"{player.doc_id} : {player.__str__}")
+        choice = user_input.int_range_input(players_ids)
+        Tournoi.players_list.remove(player.doc_id == choice)
 
     def generate_first_round(self, Tournoi):
         """
@@ -123,12 +144,12 @@ class TournoiController:
         Tournoi.rounds_list.append(next_round)
 
     def start_round(self, Tournoi):
-        current_round = Tournoi.rounds_list[-1]
+        current_round = Tournoi.rounds_list[Tournoi.current_round]
         current_round.starting_time()
         print(f"start_round: {current_round}")
 
     def end_round(self, Tournoi):
-        current_round = Tournoi.rounds_list[-1]
+        current_round = Tournoi.rounds_list[Tournoi.current_round]
         current_round.ending_time()
         print(f"Ended_round : {current_round}")
 
@@ -141,10 +162,15 @@ class TournoiController:
         while len(Tournoi.rounds_list) != Tournoi.number_of_rounds:
             if not Tournoi.rounds_list:
                 self.generate_first_round(Tournoi)
+                Tournoi.current_round = 1
                 self.start_round(Tournoi)
+                controller_db.update_turnament(Tournoi)
                 self.end_round(Tournoi)
                 controller_db.update_turnament(Tournoi)
-            self.generate_round(Tournoi)
-            self.start_round(Tournoi)
-            self.end_round(Tournoi)
-            controller_db.update_turnament(Tournoi)
+            else:
+                self.generate_round(Tournoi)
+                Tournoi.current_round += 1
+                self.start_round(Tournoi)
+                controller_db.update_turnament(Tournoi)
+                self.end_round(Tournoi)
+                controller_db.update_turnament(Tournoi)

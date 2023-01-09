@@ -1,25 +1,13 @@
 from views.user_input import UserChoice
+from controllers.database import DbController
 
 user_input = UserChoice()
+db_controller = DbController()
 
 
 class DbViewer:
-    # def ask_player_info(self):
-    #     last_name = input("Entrez le nom de famille du joueur :\n").lower()
-    #     first_name = input("Entrez le prénom du joueur :\n").lower()
-    #     birth_date = input("Entrez la date de naissance du joueur (dd/mm/yyyy) :\n")
-    #     info = (last_name, first_name, birth_date)
-    #     return info
-
-    # def ask_turnament_info(self):
-    #     turnament_name = input("Entrez le nom du tournoi :\n").lower()
-    #     turnament_date = input("Entrez la date du tournoi :\n").lower()
-    #     turnament_place = input("Entrez le lieu du tournoi :\n").lower()
-    #     info = (turnament_name, turnament_date, turnament_place)
-    #     return info
-
     def new_player_info(self):
-        """Ask user for infos about a player, returns a dict with the infos."""
+        """Ask user for infos about a player, returns a list of dict with the infos."""
         new_player_list = []
         adding_entry = True
 

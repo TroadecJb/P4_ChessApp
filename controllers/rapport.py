@@ -25,7 +25,7 @@ class Rapport:
             print("Aucun joueur dans la base donnée.")
             pass
 
-    def get_turnament_players(self, Tournoi):
+    def show_turnament_players(self, Tournoi):
         if len(Tournoi.players_list) > 0:
             prompt = "Sélectionner le rangement  1- alphabétique | 2- classement\n"
             print(prompt)
@@ -54,7 +54,7 @@ class Rapport:
             print(message)
             pass
 
-    def get_all_rounds(self, Tournoi):
+    def show_turnament_rounds(self, Tournoi):
         if len(Tournoi.rounds_list) > 0:
             rounds_list = [r for r in Tournoi.rounds_list]
             pprint(rounds_list)
@@ -62,7 +62,7 @@ class Rapport:
             message = "Ce tournoi ne semble pas encore avoir eu lieu et ne possède pas de tour."
             print(message)
 
-    def get_all_matchs(self, Tournoi):
+    def show_turnament_matchs(self, Tournoi):
         if len(Tournoi.rounds_list) > 0:
             rounds_list = [r for r in Tournoi.rounds_list]
             matchs_list = []
