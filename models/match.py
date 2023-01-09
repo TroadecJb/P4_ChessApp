@@ -34,6 +34,8 @@ class Match:
         # }
         # return self.serialized
         serialized = vars(self)
+        serialized["player_1"] = self.player_1.doc_id
+        serialized["player_2"] = self.player_2.doc_id
         return serialized
 
     def deserialize(self, data):  # chelou

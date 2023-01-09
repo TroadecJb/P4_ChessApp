@@ -9,6 +9,7 @@ class Tournoi:
     """Class for a turnament"""
 
     def __init__(self):
+        self.doc_id = ""
         self.name = ""
         self.place = ""
         self.date = ""
@@ -19,7 +20,6 @@ class Tournoi:
         self.matchs_list = []
         self.time_mode = ""
         self.description = ""
-        self.doc_id = ""
 
     def __str__(self):
         return f"\n{self.name} a lieu à {self.place}, le {self.date}.\nLes participants sont {self.players_list}.\nC'est en tournoi en {self.number_of_rounds} tour(s) avec un contrôle de temps {self.time_mode}."
@@ -96,17 +96,20 @@ class Tournoi:
 
     def serialize(self):
         players_list = []
-        for player in self.players_list:
-            players_list.append(player.doc_id)
+        if self.players_list:
+            for player in self.players_list:
+                players_list.append(player.doc_id)
 
         rounds_list = []
-        for r in self.rounds_list:
-            x = r.serialize()
-            rounds_list.append(x)
+        if self.rounds_list:
+            for r in self.rounds_list:
+                x = r.serialize()
+                rounds_list.append(x)
 
         serialized = vars(self)
         serialized["rounds_list"] = rounds_list
         serialized["players_list"] = players_list
+        print("serialized")
         return serialized
 
     def update_info(self):

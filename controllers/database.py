@@ -129,11 +129,11 @@ class DbController:
         turnament.matchs_list = []
         turnament.rounds_list = []
         for t in turnament_serialized["rounds_list"]:
-            tour_class = tour.Tour(t["round_index"])
+            tour_class = tour.Tour(t["index"])
 
             tour_class.matchs_list = []
             for m in t["matchs_list"]:
-                match_class = match.Match(m["match_index"])
+                match_class = match.Match(m["index"])
                 match_class.match_result = m["match_result"]
                 player_1 = [
                     player

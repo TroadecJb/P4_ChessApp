@@ -27,10 +27,10 @@ class Tour:
         date_time = datetime.now()
         self.start_time = date_time.strftime("%d/%m/%Y, %H:%M:%S")
 
-    def ending_time(self):
-        time = datetime.now()
+    def ending_t(self):
+        date_time = datetime.now()
 
-        self.end_time = time.strftime("%d/%m/%Y, %H:%M:%S")
+        self.end_time = date_time.strftime("%d/%m/%Y, %H:%M:%S")
         for match in self.matchs_list:
             match.set_result()
 

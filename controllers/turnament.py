@@ -30,7 +30,9 @@ class TournoiController:
             new_turnament.set_time_mode()
             self.select_players_to_add(new_turnament)
             new_turnament.current_round = 0
-            print(new_turnament.players_list)
+            new_id = controller_db.get_doc_id(TOURNOI_TABLE)
+            new_turnament.doc_id = new_id[-1] + 1
+
             return new_turnament
 
         elif choice == "n":
@@ -117,7 +119,6 @@ class TournoiController:
 
             first_round.matchs_list.append(new_match)
             Tournoi.matchs_list.append([getattr(joueur, "doc_id") for joueur in pair])
-            print("\ntournoi match_list, generate first round", Tournoi.matchs_list)
 
         Tournoi.rounds_list.append(first_round)
 
@@ -139,17 +140,19 @@ class TournoiController:
             new_match.player_2 = pair[1]
             next_round.matchs_list.append(new_match)
             Tournoi.matchs_list.append([getattr(joueur, "doc_id") for joueur in pair])
-            print("\ntournoi match_list, generate round", Tournoi.matchs_list)
 
         Tournoi.rounds_list.append(next_round)
 
     def start_round(self, Tournoi):
         current_round = Tournoi.rounds_list[Tournoi.current_round]
         current_round.starting_time()
-        print(f"start_round: {current_round}")
+        print(f"start_round: {current_round.show_matchs()}")
 
-    def end_round(self, Tournoi):
+    def end_round(
+        self, Tournoi
+    ):  # current apparait comme un dictionnaire et non une instance de Tour()
         current_round = Tournoi.rounds_list[Tournoi.current_round]
+        print(type(current_round))
         current_round.ending_time()
         print(f"Ended_round : {current_round}")
 
@@ -159,10 +162,10 @@ class TournoiController:
         else:
             pass
 
-        while len(Tournoi.rounds_list) != Tournoi.number_of_rounds:
+        while len(Tournoi.rounds_list) <= Tournoi.number_of_rounds:
             if not Tournoi.rounds_list:
                 self.generate_first_round(Tournoi)
-                Tournoi.current_round = 1
+                Tournoi.current_round = 0
                 self.start_round(Tournoi)
                 controller_db.update_turnament(Tournoi)
                 self.end_round(Tournoi)
