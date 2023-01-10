@@ -104,7 +104,7 @@ class TournoiController:
         """
         Generate first round for the turnament, with paired players according to pairing system.
         """
-        index = len(Tournoi.rounds_list) + 1
+        index = 1
         first_round = tour.Tour(index)
 
         for player in Tournoi.players_list:
@@ -146,15 +146,12 @@ class TournoiController:
     def start_round(self, Tournoi):
         current_round = Tournoi.rounds_list[Tournoi.current_round]
         current_round.starting_time()
-        print(f"start_round: {current_round.show_matchs()}")
+        print(current_round)
 
-    def end_round(
-        self, Tournoi
-    ):  # current apparait comme un dictionnaire et non une instance de Tour()
+    def end_round(self, Tournoi):
         current_round = Tournoi.rounds_list[Tournoi.current_round]
-        print(type(current_round))
         current_round.ending_time()
-        print(f"Ended_round : {current_round}")
+        print(current_round)
 
     def run_turnament(self, Tournoi):
         if len(Tournoi.players_list) == 0:
@@ -162,18 +159,20 @@ class TournoiController:
         else:
             pass
 
-        while len(Tournoi.rounds_list) <= Tournoi.number_of_rounds:
-            if not Tournoi.rounds_list:
+        while Tournoi.current_round < Tournoi.number_of_rounds:
+            if Tournoi.current_round == 0:
                 self.generate_first_round(Tournoi)
-                Tournoi.current_round = 0
                 self.start_round(Tournoi)
                 controller_db.update_turnament(Tournoi)
                 self.end_round(Tournoi)
+                Tournoi.current_round += 1
                 controller_db.update_turnament(Tournoi)
             else:
                 self.generate_round(Tournoi)
-                Tournoi.current_round += 1
                 self.start_round(Tournoi)
                 controller_db.update_turnament(Tournoi)
                 self.end_round(Tournoi)
+                Tournoi.current_round += 1
                 controller_db.update_turnament(Tournoi)
+
+        print("Tous les tours ont eu lieu.")

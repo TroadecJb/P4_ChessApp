@@ -198,10 +198,10 @@ class Main_menu:
                     )
                     prompt = (
                         "\n- - - Menu Principal / Rapports / Autres information du tournoi - - -\n"
+                        "\t0 - Revenir en arrière\n"
                         "\t1 - Afficher la liste des joueurs\n"
                         "\t2 - Afficher les tours\n"
                         "\t3 - afficher les matchs\n"
-                        "\t0 - Revenir en arrière\n"
                     )
                     print(prompt)
                     choice = user_input.user_input()

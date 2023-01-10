@@ -9,15 +9,9 @@ class Tour:
         self.matchs_list = []
         self.start_time = ""
         self.end_time = ""
-        # self.serialized = {
-        #     "round_index": self.index,
-        #     "matchs_list": [],
-        #     "start_time": self.start_time,
-        #     "end_time": self.end_time,
-        # }
 
     def __repr__(self):
-        return f"Tour {self.index}\n liste des matchs:\n{self.matchs_list}\ndébut: {self.start_time}\nfin: {self.end_time}."
+        return f"\nTour {self.index}\nListe des matchs:\n{self.matchs_list}\ndébut: {self.start_time}\nfin: {self.end_time}"
 
     def show_matchs(self):
         for match in self.matchs_list:
@@ -27,7 +21,7 @@ class Tour:
         date_time = datetime.now()
         self.start_time = date_time.strftime("%d/%m/%Y, %H:%M:%S")
 
-    def ending_t(self):
+    def ending_time(self):
         date_time = datetime.now()
 
         self.end_time = date_time.strftime("%d/%m/%Y, %H:%M:%S")
@@ -40,16 +34,12 @@ class Tour:
             x = match.serialize()
             matchs_list.append(x)
 
-        serialized = vars(self)
-        serialized["matchs_list"] = matchs_list
-        # self.serialized = {
-        #     "round_index": self.index,
-        #     "matchs_list": matchs_list,
-        #     "start_time": self.start_time,
-        #     "end_time": self.end_time,
-        # }
-
-        # return self.serialized
+        serialized = {
+            "index": self.index,
+            "matchs_list": matchs_list,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+        }
         return serialized
 
     def deserialize(self, data):

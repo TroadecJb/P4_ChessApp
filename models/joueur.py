@@ -13,7 +13,6 @@ class Joueur:
         self.birth_date = ""
         self.rank = 0
         self.points = 0
-        # self.serialized = ""
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
@@ -41,16 +40,15 @@ class Joueur:
         self.points = 0
 
     def serialize(self):
-        # self.serialized = {
-        #     "doc_id": self.doc_id,
-        #     "first_name": self.first_name,
-        #     "last_name": self.last_name,
-        #     "birth_date": self.birth_date,
-        #     "rank": self.rank,
-        #     "points": self.points,
-        # }
-        # return self.serialized
-        serialized = vars(self)
+        serialized = {
+            "doc_id": self.doc_id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "birth_date": self.birth_date,
+            "rank": self.rank,
+            "points": self.points,
+        }
+
         return serialized
 
     def deserialize(self, player_db):

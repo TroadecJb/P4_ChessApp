@@ -1,5 +1,4 @@
 from tinydb import TinyDB
-from pprint import pprint
 import operator
 from views.user_input import UserChoice
 
@@ -37,17 +36,21 @@ class Rapport:
                 )
             elif choice == "2":
                 liste = sorted(Tournoi.players_list, key=operator.attrgetter("rank"))
-            pprint(liste)
-            # Ajouter retour menu ?
+
+            for player in liste:
+                print(player)
+
         else:
             message = "Ce tournoi ne possède pas de joueurs."
-            pprint(message)
+            print(message)
 
     def show_all_turnaments(self):
         turnament_data = TOURNOI_TABLE.all()
         if turnament_data:
+            prompt = "\nListe des tournois:"
+            print(prompt)
             for turnament in turnament_data:
-                readable = f'{turnament["name"]}, {turnament["date"]}, {turnament["place"]},\n{turnament["description"]}'
+                readable = f'{turnament["name"]}, {turnament["date"]}, {turnament["place"]}.\n{turnament["description"]}'
                 print(readable, sep="\n")
         else:
             message = "Aucun tournoi dans la base de donnée."
@@ -57,7 +60,8 @@ class Rapport:
     def show_turnament_rounds(self, Tournoi):
         if len(Tournoi.rounds_list) > 0:
             rounds_list = [r for r in Tournoi.rounds_list]
-            pprint(rounds_list)
+            for r in rounds_list:
+                print(r)
         else:
             message = "Ce tournoi ne semble pas encore avoir eu lieu et ne possède pas de tour."
             print(message)
@@ -65,10 +69,8 @@ class Rapport:
     def show_turnament_matchs(self, Tournoi):
         if len(Tournoi.rounds_list) > 0:
             rounds_list = [r for r in Tournoi.rounds_list]
-            matchs_list = []
             for r in rounds_list:
-                matchs_list.append(r.matchs_list)
-            pprint(matchs_list)
+                print(r.matchs_list)
         else:
             message = "Ce tournoi ne semble pas encore avoir eu lieu et ne possède pas de match"
             print(message)

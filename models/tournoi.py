@@ -106,10 +106,20 @@ class Tournoi:
                 x = r.serialize()
                 rounds_list.append(x)
 
-        serialized = vars(self)
-        serialized["rounds_list"] = rounds_list
-        serialized["players_list"] = players_list
-        print("serialized")
+        serialized = {
+            "doc_id": self.doc_id,
+            "name": self.name,
+            "place": self.place,
+            "date": self.date,
+            "number_of_rounds": self.number_of_rounds,
+            "rounds_list": rounds_list,
+            "current_round": self.current_round,
+            "players_list": players_list,
+            "matchs_list": self.matchs_list,
+            "time_mode": self.time_mode,
+            "description": self.description,
+        }
+
         return serialized
 
     def update_info(self):

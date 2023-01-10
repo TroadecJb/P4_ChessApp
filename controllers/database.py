@@ -83,16 +83,17 @@ class DbController:
         turnament_data = TOURNOI_TABLE.all()
 
         if turnament_data:
+            prompt = "Sélectionnez le numéro du tournoi voulu :"
+            print(prompt)
+
             for turnament in TOURNOI_TABLE:
                 print(
-                    f"{turnament.doc_id} -",
+                    f"\t{turnament.doc_id} -",
                     turnament["name"],
                     turnament["date"],
                     turnament["place"],
                 )
             turnament_ids = self.get_doc_id(TOURNOI_TABLE)
-            prompt = "Sélectionnez le numéro du tournoi voulu :"
-            print(prompt, "\n")
 
             choice = user_input.int_range_input(turnament_ids)
             if choice:
