@@ -61,7 +61,7 @@ class Main_menu:
                 player_to_modify = controller_db.get_one_player_from_db()
                 if player_to_modify:
                     prompt = (
-                        "\nSélectionner l'information à modifier:"
+                        "\nSélectionner l'information à modifier:\n"
                         "\t1 - nom\n"
                         "\t2 - prénom\n"
                         "\t3 - date de naissance\n"
@@ -180,7 +180,7 @@ class Main_menu:
                 "\t0 - Retour au menu principal\n"
                 "\t1 - Afficher la liste de tous les joueurs\n"
                 "\t2 - Afficher tous les tournois\n"
-                "\t3 - Afficher d'autres informations sur un tournois\n"
+                "\t3 - Afficher d'autres informations sur un tournoi\n"
             )
             choice = user_input.str_range_input(["0", "1", "2", "3"])
 

@@ -48,10 +48,10 @@ class Tournoi:
 
     def set_time_mode(self):
         prompt = (
-            "\nSélectionner le mode de Contrôle du temps :"
-            "\n1 - Bullet"
-            "\n2 - Blitz"
-            "\n3 - Coup Rapide"
+            "\nSélectionner le mode de Contrôle du temps :\n"
+            "\t1 - Bullet\n"
+            "\t2 - Blitz\n"
+            "\t3 - Coup Rapide\n"
         )
 
         print(prompt)
@@ -83,7 +83,7 @@ class Tournoi:
         pass
 
     def add_description(self):
-        prompt = "\nVoulez-vous ajotuer une description ? (y/n)"
+        prompt = "\nVoulez-vous ajouter une description ? (y/n)"
         print(prompt)
         choice = user_input.user_input()
         if choice == "y":

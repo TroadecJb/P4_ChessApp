@@ -73,6 +73,6 @@ class UserChoice:
                 return choice
             else:
                 print(self.message)
-                return self.str_range_input()
+                return self.str_range_input(range)
         else:
             return
