@@ -10,9 +10,6 @@ user_input = UserChoice()
 
 
 class Rapport:
-    def __init__(self):
-        SORTING_LIST = ("alpha", "rank")
-
     def show_all_players(self):
         players_list = JOUEUR_TABLE.all()
         if players_list:

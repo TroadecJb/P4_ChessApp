@@ -18,13 +18,14 @@ class Main_menu:
 
     def program_selection(self):
         while self.active:
-            prompt = print(
+            prompt = (
                 "\n- - - Menu Principal - - -\n"
                 "Que souhaitez vous faire ?\n"
                 "\t1- Gestion des joueurs\n"
                 "\t2- Gérer les tournois\n"
                 "\t3- Générer un rapport\n"
             )
+            print(prompt)
             choice = user_input.str_range_input(["1", "2", "3"])
 
             if choice == "1":

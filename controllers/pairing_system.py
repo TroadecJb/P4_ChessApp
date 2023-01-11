@@ -26,7 +26,6 @@ class SwissSystem:
         If the pair already occured, the next player in position is picked
         """
 
-        players_number = len(players_list)
         sorted_players = sorted(
             players_list, key=operator.attrgetter("points", "rank"), reverse=True
         )

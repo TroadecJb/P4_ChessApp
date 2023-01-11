@@ -262,7 +262,7 @@ class TournoiController:
         """Check if all matchs are finished in the last round, if not returns the unfinished matchs."""
 
         last_round = Tournoi.rounds_list[-1]
-        unfinished_matchs = [m for m in last_round.matchs_list if m.finished == False]
+        unfinished_matchs = [m for m in last_round.matchs_list if m.finished is False]
 
         if unfinished_matchs:
             for m in unfinished_matchs:
@@ -274,24 +274,8 @@ class TournoiController:
         players_list_check = self.check_players_list_odd_even(Tournoi)
         if players_list_check:
             while Tournoi.current_round < Tournoi.number_of_rounds:
-                if Tournoi.current_round == 0:
-                    # self.generate_first_round(Tournoi)
-                    self.run_round(Tournoi)
-                    # self.start_round(Tournoi)
-                    # controller_db.update_turnament(Tournoi)
-                    # self.end_round(Tournoi)
-                    # self.matchs_unfinished(Tournoi)
-                    # Tournoi.current_round += 1
-                    # controller_db.update_turnament(Tournoi)
-                else:
-                    # self.matchs_unfinished(Tournoi)
-                    # self.generate_round(Tournoi)
-                    self.run_round(Tournoi)
-                    # self.start_round(Tournoi)
-                    # controller_db.update_turnament(Tournoi)
-                    # self.end_round(Tournoi)
-                    # self.matchs_unfinished(Tournoi)
-                    # Tournoi.current_round += 1
-                    # controller_db.update_turnament(Tournoi)
+                self.run_round(Tournoi)
 
             print(f"Tous les tours du tournoi {Tournoi.name} ont eu lieu.")
+        else:
+            pass
