@@ -2,3 +2,6 @@ venv/
 __pycache__/
 /test.py
 /db.json
+.idea/
+/_db.json
+/test2.py
