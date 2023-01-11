@@ -52,7 +52,7 @@ class Rapport:
             prompt = "\nListe des tournois:"
             print(prompt)
             for turnament in turnament_data:
-                readable = f'{turnament["name"]}, {turnament["date"]}, {turnament["place"]}.\n{turnament["description"]}'
+                readable = f'{turnament["name"]}, {turnament["date"]}, {turnament["place"]}.\ndescription: {turnament["description"]}\n'
                 print(readable, sep="\n")
         else:
             message = "Aucun tournoi dans la base de donnée."
