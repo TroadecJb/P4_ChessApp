@@ -1,12 +1,12 @@
 from views.database import DbViewer
-from views.rapport import Rapport
 from views.user_input import UserChoice
-from controllers.database import ControllerDb
+from controllers.database import DbController
 from controllers.turnament import TournoiController
+from controllers.rapport import Rapport
 
 db_viewer = DbViewer()
 rapport = Rapport()
-controller_db = ControllerDb()
+controller_db = DbController()
 tournoi_controller = TournoiController()
 user_input = UserChoice()
 
@@ -14,6 +14,7 @@ user_input = UserChoice()
 class Main_menu:
     def __init__(self):
         self.active = True
+        user_input.user_help()
 
     def program_selection(self):
         while self.active:
@@ -54,13 +55,13 @@ class Main_menu:
 
             elif choice == "2":
                 new_players = db_viewer.new_player_info()
-                controller_db.add_players_to_DB(new_players)
+                controller_db.add_players_to_db(new_players)
 
             elif choice == "3":
-                player_to_modify = controller_db.get_player_from_DB()
+                player_to_modify = controller_db.get_one_player_from_db()
                 if player_to_modify:
                     prompt = (
-                        "\nSélectionner l'information à modifier:"
+                        "\nSélectionner l'information à modifier:\n"
                         "\t1 - nom\n"
                         "\t2 - prénom\n"
                         "\t3 - date de naissance\n"
@@ -69,7 +70,7 @@ class Main_menu:
                         "\t6 - tout\n"
                     )
                     print(prompt)
-                    choice = user_input.user_input()
+                    choice = user_input.str_range_input(["1", "2", "3", "4", "5", "6"])
                     if choice == "1":
                         player_to_modify.set_last_name()
                     elif choice == "2":
@@ -84,12 +85,12 @@ class Main_menu:
                         player_to_modify.update_info()
                     else:
                         pass
-                    controller_db.update_player(player_to_modify)
+                    controller_db.update_player_in_db(player_to_modify)
                 else:
                     pass
 
             elif choice == "4":
-                controller_db.remove_player()
+                controller_db.remove_player_in_db()
 
             elif choice == "0":
                 self.program_selection()
@@ -108,16 +109,20 @@ class Main_menu:
                 "\t5 - Supprimer un tournoi\n"
             )
             print(prompt)
-            choice = user_input.str_range_input(["0", "1", "2", "3", "4"])
+            choice = user_input.str_range_input(["0", "1", "2", "3", "4", "5"])
             if choice == "1":
                 new_turnament = tournoi_controller.create_turnament()
-                controller_db.save_turnament(new_turnament)
+                if new_turnament:
+                    controller_db.save_turnament(new_turnament)
+                else:
+                    pass
             elif choice == "2":
                 selected_turnament = controller_db.retrieve_turnament()
                 if selected_turnament:
                     selected_turnament = controller_db.deserialize_turnament(
                         selected_turnament
                     )
+
                     tournoi_controller.run_turnament(selected_turnament)
                 else:
                     pass
@@ -143,10 +148,13 @@ class Main_menu:
                         "\t4 - Mode de controle de temps\n"
                         "\t5 - Nombre de tours\n"
                         "\t6 - Liste des joueurs\n"
-                        "\t7 - Toutes les informations\n"
+                        "\t7 - Modifier la description\n"
+                        "\t8 - Toutes les informations\n"
                     )
                     print(prompt)
-                    choice = user_input.user_input()
+                    choice = user_input.str_range_input(
+                        ["1", "2", "3", "4", "5", "6", "7", "8"]
+                    )
                     if choice == "1":
                         turnament_to_modify.set_name()
                     elif choice == "2":
@@ -158,16 +166,24 @@ class Main_menu:
                     elif choice == "5":
                         turnament_to_modify.set_number_rounds()
                     elif choice == "6":
-                        # ajouter la possibilité de refaire toutes la liste des joueurs, de supprimer des joueurs de la liste ou d'jouter des joueurs à la liste
-                        tournoi_controller.select_players_to_add(turnament_to_modify)
-
+                        prompt = (
+                            "\nModification de la liste des joueurs\n"
+                            "\t1 - Ajouter des joueurs\n"
+                            "\t2 - Retier des joueurs\n"
+                        )
+                        print(prompt)
+                        choice = user_input.str_range_input(["1", "2"])
+                        tournoi_controller.modify_players_list(
+                            turnament_to_modify, choice
+                        )
                     elif choice == "7":
+                        turnament_to_modify.add_description()
+                    elif choice == "8":
                         turnament_to_modify.update_info()
-                        # ajouter modification liste des joueurs
                     controller_db.update_turnament(turnament_to_modify)
 
             elif choice == "5":
-                controller_db.remove_turnament()
+                controller_db.remove_turnamentin_db()
             elif choice == "0":
                 self.program_selection()
 
@@ -179,13 +195,16 @@ class Main_menu:
                 "\t0 - Retour au menu principal\n"
                 "\t1 - Afficher la liste de tous les joueurs\n"
                 "\t2 - Afficher tous les tournois\n"
-                "\t3 - Afficher d'autres informations sur un tournois\n"
+                "\t3 - Afficher d'autres informations sur un tournoi\n"
             )
             choice = user_input.str_range_input(["0", "1", "2", "3"])
+
             if choice == "1":
                 rapport.show_all_players()
+
             elif choice == "2":
                 rapport.show_all_turnaments()
+
             elif choice == "3":
                 selected_turnament = controller_db.retrieve_turnament()
                 if selected_turnament:
@@ -194,24 +213,26 @@ class Main_menu:
                     )
                     prompt = (
                         "\n- - - Menu Principal / Rapports / Autres information du tournoi - - -\n"
+                        "\t0 - Revenir en arrière\n"
                         "\t1 - Afficher la liste des joueurs\n"
                         "\t2 - Afficher les tours\n"
                         "\t3 - afficher les matchs\n"
-                        "\t0 - Revenir en arrière\n"
                     )
                     print(prompt)
-                    choice = user_input.user_input()
+                    choice = user_input.str_range_input(["0", "1", "2", "3"])
                     if choice == "1":
-                        rapport.get_turnament_players(selected_turnament)
+                        rapport.show_turnament_players(selected_turnament)
 
                     elif choice == "2":
-                        rapport.get_all_rounds(selected_turnament)
+                        rapport.show_turnament_rounds(selected_turnament)
 
                     elif choice == "3":
-                        rapport.get_all_matchs(selected_turnament)
+                        rapport.show_turnament_matchs(selected_turnament)
 
                     elif choice == "0":
-                        self.report_generator()
+                        self.report_program()
+                else:
+                    print("Pas de tournoi dans la base de donnée.")
 
             elif choice == "0":
                 self.program_selection()

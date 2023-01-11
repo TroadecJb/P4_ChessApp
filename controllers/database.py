@@ -1,5 +1,5 @@
 from tinydb import TinyDB
-from models import tournoi, joueur, tour, match, exceptions
+from models import tournoi, joueur, tour, match
 from views.user_input import UserChoice
 
 DB = TinyDB("db.json")
@@ -9,7 +9,7 @@ TOURNOI_TABLE = DB.table("tournois")
 user_input = UserChoice()
 
 
-class ControllerDb:
+class DbController:
     """exchange between DB and program"""
 
     def get_doc_id(self, table):
@@ -24,11 +24,11 @@ class ControllerDb:
 
         return liste
 
-    def add_players_to_DB(self, players_data):
+    def add_players_to_db(self, players_data):
         """Add to players_data to the table JOUEUR_TABLE"""
         JOUEUR_TABLE.insert_multiple(players_data)
 
-    def get_player_from_DB(self):
+    def get_one_player_from_db(self):
         """Retrieve one player from database, based on user selection."""
         players_ids = self.get_doc_id(JOUEUR_TABLE)
         if players_ids:
@@ -49,7 +49,7 @@ class ControllerDb:
             print("Aucun joueur dans la base de données.")
             pass
 
-    def get_players_from_DB(self):
+    def get_multiple_players_from_db(self):
         """Retrieve multiple players from database, based on user selection, returns the list of class Joueur"""
         players_ids = self.get_doc_id(JOUEUR_TABLE)
         players_list = []
@@ -83,16 +83,17 @@ class ControllerDb:
         turnament_data = TOURNOI_TABLE.all()
 
         if turnament_data:
+            prompt = "Sélectionnez le numéro du tournoi voulu :"
+            print(prompt)
+
             for turnament in TOURNOI_TABLE:
                 print(
-                    f"{turnament.doc_id} -",
+                    f"\t{turnament.doc_id} -",
                     turnament["name"],
                     turnament["date"],
                     turnament["place"],
                 )
             turnament_ids = self.get_doc_id(TOURNOI_TABLE)
-            prompt = "Sélectionnez le numéro du tournoi voulu :"
-            print(prompt, "\n")
 
             choice = user_input.int_range_input(turnament_ids)
             if choice:
@@ -115,6 +116,7 @@ class ControllerDb:
         turnament.place = turnament_serialized["place"]
         turnament.date = turnament_serialized["date"]
         turnament.number_of_rounds = int(turnament_serialized["number_of_rounds"])
+        turnament.current_round = int(turnament_serialized["current_round"])
 
         turnament.players_list = []
         for p in turnament_serialized["players_list"]:
@@ -128,11 +130,11 @@ class ControllerDb:
         turnament.matchs_list = []
         turnament.rounds_list = []
         for t in turnament_serialized["rounds_list"]:
-            tour_class = tour.Tour(t["round_index"])
+            tour_class = tour.Tour(t["index"])
 
             tour_class.matchs_list = []
             for m in t["matchs_list"]:
-                match_class = match.Match(m["match_index"])
+                match_class = match.Match(m["index"])
                 match_class.match_result = m["match_result"]
                 player_1 = [
                     player
@@ -177,7 +179,7 @@ class ControllerDb:
             serialized = player.serialize()
             JOUEUR_TABLE.insert(serialized)
 
-    def update_player(self, x):
+    def update_player_in_db(self, x):
         """Update JOUEUR_TABLE with serialized player's data, based on doc_id."""
         serialized = x.serialize()
         JOUEUR_TABLE.update(serialized, doc_ids=[x.doc_id])
@@ -187,7 +189,7 @@ class ControllerDb:
         serialized = Tournoi.serialize()
         TOURNOI_TABLE.update(serialized, doc_ids=[Tournoi.doc_id])
 
-    def remove_player(self):
+    def remove_player_in_db(self):
         players_list = JOUEUR_TABLE.all()
 
         if players_list:
@@ -212,7 +214,7 @@ class ControllerDb:
             print("Aucun joueur dans la base de données.")
             pass
 
-    def remove_turnament(self):
+    def remove_turnamentin_db(self):
         turnaments_list = TOURNOI_TABLE.all()
 
         if turnaments_list:

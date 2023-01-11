@@ -2,16 +2,33 @@ class UserChoice:
     """Check for user input."""
 
     def __init__(self):
-        self.message = "Veuillez entrer un nombre parmi ceux proposés.\n"
+        self.message = "Veuillez effectuer un choix parmi ceux proposés.\n"
+
+    def user_help(self):
+        """Show user basic commands"""
+        message = (
+            "\n/// Naviguer en entrant le numéro du menu ou des choix proposés.",
+            "/// Pour valider votre choix appuyer sur 'Entrée'.",
+            "/// Pour quitter le programme entrez: 'quitter'.",
+            "/// Pour annuler l'action en cours entrez: 'annuler'.",
+            "/// Pour afficher l'aide entrez: 'aide'.",
+        )
+        for i in message:
+            print(i)
 
     def user_input(self):
         choice = input()
-        if choice.lower() == "quitter":
-            quit()
-        elif choice.lower() == "annuler":
-            pass
+        if len(choice) > 0:
+            if choice.lower() == "quitter":
+                quit()
+            elif choice.lower() == "annuler":
+                pass
+            elif choice.lower() == "aide":
+                self.user_help()
+            else:
+                return choice.lower()
         else:
-            return choice.lower()
+            pass
 
     def int_input(self):
         """Check if user input is type(int). Returns input type(int)."""
@@ -59,6 +76,6 @@ class UserChoice:
                 return choice
             else:
                 print(self.message)
-                return self.str_range_input()
+                return self.str_range_input(range)
         else:
             return
