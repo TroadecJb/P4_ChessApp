@@ -19,7 +19,7 @@ class TournoiController:
     def create_turnament(self):
         prompt = "\nSouhaitez vous créer un nouveau tournoi ? (y/n)"
         print(prompt)
-        choice = user_input.user_input()
+        choice = user_input.str_range_input(["y", "n"])
 
         if choice == "y":
             new_turnament = tournoi.Tournoi()
@@ -28,22 +28,49 @@ class TournoiController:
             new_turnament.set_place()
             new_turnament.set_number_rounds()
             new_turnament.set_time_mode()
-            self.select_players_to_add(new_turnament)
+            self.add_players(new_turnament)
             new_turnament.current_round = 0
             new_id = controller_db.get_doc_id(TOURNOI_TABLE)
             new_turnament.doc_id = new_id[-1] + 1
 
             return new_turnament
 
-        elif choice == "n":
+        else:
             pass
 
-        else:
-            message = "Commande non valide."
-            print(message)
-            self.create_turnament()
+    def show_players_list(self, Tournoi):
+        print("\nListe des joueurs :")
+        for player in Tournoi.players_list:
+            print("\t", player)
 
-    def select_players_to_add(self, Tournoi):
+    def check_players_list_odd_even(self, Tournoi):
+        """If the players list is empty, ask to add players. Check if players list is odd or even and if odd ask to add or remove one player."""
+        print("test check players", len(Tournoi.players_list))
+        if len(Tournoi.players_list) > 0:
+            if len(Tournoi.players_list) % 2 != 0:
+                prompt = (
+                    f"\nLes joueurs sont en nombre impair {len(Tournoi.players_list)}:\n"
+                    "\t1 - ajouter un joueur"
+                    "\t2 - supprimer un joueur"
+                )
+                print(prompt)
+                choice = user_input.int_range_input([1, 2])
+                if choice == 1:
+                    self.add_one_player(Tournoi)
+                    controller_db.update_turnament(Tournoi)
+                    self.check_players_list_odd_even(Tournoi)
+                else:
+                    self.remove_one_player(Tournoi)
+                    controller_db.update_turnament(Tournoi)
+                    self.check_players_list_odd_even(Tournoi)
+
+            else:
+                return True
+        else:
+            self.add_players(Tournoi)
+            self.check_players_list_odd_even(Tournoi)
+
+    def add_players(self, Tournoi):
         """Takes user selection and retrieve players from the db and adds it to the turnament players list."""
         selected_player = []
         players_list = []
@@ -52,7 +79,7 @@ class TournoiController:
         if JOUEUR_TABLE.all():
             prompt = "\nVoulez-vous ajouter des joueurs dans ce tournoi ? (y/n)"
             print(prompt)
-            choice = user_input.user_input()
+            choice = user_input.str_range_input(["y", "n"])
             players_ids = controller_db.get_doc_id(JOUEUR_TABLE)
 
             if choice == "y":
@@ -66,6 +93,7 @@ class TournoiController:
 
                     if selection:
                         selected_player.append(JOUEUR_TABLE.get(doc_id=selection))
+                        players_ids.remove(selection)
 
                     else:
                         adding_player = False
@@ -84,21 +112,73 @@ class TournoiController:
             print("Aucun joueur dans la base de données.")
             pass
 
+    def add_one_player(self, Tournoi):
+        """Takes user selection and retrieve player from the db and adds it to the turnament players list."""
+        self.show_players_list(Tournoi)
+        prompt = (
+            "\nSélectionner l'index du joueur que vous souhaitez ajouter au tournoi:"
+        )
+        print(prompt)
+
+        players_ids = [player.doc_id for player in JOUEUR_TABLE.all()]
+        for player in JOUEUR_TABLE.all():
+            print(f'{player.doc_id} : {player["last_name"]} {player["first_name"]}')
+        choice = user_input.int_range_input(players_ids)
+
+        selected_player = JOUEUR_TABLE.get(doc_id=choice)
+        new_player = joueur.Joueur()
+        new_player.deserialize(selected_player)
+        Tournoi.players_list.append(new_player)
+
     def redo_players_list(self, Tournoi):
+        """Empty the playes list and allows user to add players to it."""
         Tournoi.players_list = []
         print("\n Tous les joueurs ont été de la liste.")
-        self.select_players_to_add()
+        self.add_players()
 
     def remove_one_player(self, Tournoi):
+        """Remove one player from the turnament players list."""
+        self.show_players_list(Tournoi)
+
         prompt = (
             "\nSélectionner l'index du joueur que vous souhaitez retirer du tournoi:"
         )
         print(prompt)
+
         players_ids = [player.doc_id for player in Tournoi.players_list]
         for player in Tournoi.players_list:
-            print(f"{player.doc_id} : {player.__str__}")
+            print(f"{player.doc_id} : {player}")
+
         choice = user_input.int_range_input(players_ids)
-        Tournoi.players_list.remove(player.doc_id == choice)
+        player_to_remove = [
+            player for player in Tournoi.players_list if player.doc_id == choice
+        ]
+        Tournoi.players_list.remove(player_to_remove[0])
+
+    def remove_players(self, Tournoi):
+        removing_player = True
+        while removing_player:
+            prompt = "\nEntrez l'index des joueurs que vous souhaitez retirer du tournoi (pour arrêtez n'entrez aucun index et validez):"
+            print(prompt)
+            players_ids = [player.doc_id for player in Tournoi.players_list]
+            selection = user_input.int_range_input(players_ids)
+
+            if selection:
+                player_to_remove = [
+                    player
+                    for player in Tournoi.players_list
+                    if player.doc_id == selection
+                ]
+                Tournoi.players_list.remove(player_to_remove[0])
+
+            else:
+                removing_player = False
+
+    def modify_players_list(self, Tournoi, choice):
+        if choice == 1:
+            self.add_players(Tournoi)
+        elif choice == 2:
+            self.remove_players(Tournoi)
 
     def generate_first_round(self, Tournoi):
         """
@@ -154,25 +234,22 @@ class TournoiController:
         print(current_round)
 
     def run_turnament(self, Tournoi):
-        if len(Tournoi.players_list) == 0:
-            Tournoi.players_list = self.select_players_to_add()
-        else:
-            pass
+        players_list_check = self.check_players_list_odd_even(Tournoi)
+        if players_list_check:
+            while Tournoi.current_round < Tournoi.number_of_rounds:
+                if Tournoi.current_round == 0:
+                    self.generate_first_round(Tournoi)
+                    self.start_round(Tournoi)
+                    controller_db.update_turnament(Tournoi)
+                    self.end_round(Tournoi)
+                    Tournoi.current_round += 1
+                    controller_db.update_turnament(Tournoi)
+                else:
+                    self.generate_round(Tournoi)
+                    self.start_round(Tournoi)
+                    controller_db.update_turnament(Tournoi)
+                    self.end_round(Tournoi)
+                    Tournoi.current_round += 1
+                    controller_db.update_turnament(Tournoi)
 
-        while Tournoi.current_round < Tournoi.number_of_rounds:
-            if Tournoi.current_round == 0:
-                self.generate_first_round(Tournoi)
-                self.start_round(Tournoi)
-                controller_db.update_turnament(Tournoi)
-                self.end_round(Tournoi)
-                Tournoi.current_round += 1
-                controller_db.update_turnament(Tournoi)
-            else:
-                self.generate_round(Tournoi)
-                self.start_round(Tournoi)
-                controller_db.update_turnament(Tournoi)
-                self.end_round(Tournoi)
-                Tournoi.current_round += 1
-                controller_db.update_turnament(Tournoi)
-
-        print("Tous les tours ont eu lieu.")
+            print(f"Tous les tours du tournoi {Tournoi.name} ont eu lieu.")

@@ -39,7 +39,7 @@ class Match:
     def set_result(self):
         prompt = f"Indiquer le résultat pour le match {self.index} ? (y/n)\n"
         print(prompt)
-        choice = user_input.user_input()
+        choice = user_input.str_range_input(["y", "n"])
 
         if choice == "y":
             prompt = f"Entrez le numéro du joueur gagnant, 1 : {self.player_1} | 2 : {self.player_2} | 3 : Match nul \n"

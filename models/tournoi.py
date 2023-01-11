@@ -128,3 +128,5 @@ class Tournoi:
         self.set_place()
         self.set_time_mode()
         self.set_number_rounds()
+        self.redo_players()
+        self.add_description()

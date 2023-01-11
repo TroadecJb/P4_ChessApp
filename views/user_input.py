@@ -18,14 +18,17 @@ class UserChoice:
 
     def user_input(self):
         choice = input()
-        if choice.lower() == "quitter":
-            quit()
-        elif choice.lower() == "annuler":
-            pass
-        elif choice.lower() == "aide":
-            self.user_help()
+        if len(choice) > 0:
+            if choice.lower() == "quitter":
+                quit()
+            elif choice.lower() == "annuler":
+                pass
+            elif choice.lower() == "aide":
+                self.user_help()
+            else:
+                return choice.lower()
         else:
-            return choice.lower()
+            pass
 
     def int_input(self):
         """Check if user input is type(int). Returns input type(int)."""

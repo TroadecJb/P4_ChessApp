@@ -35,7 +35,9 @@ class Rapport:
                     Tournoi.players_list, key=operator.attrgetter("last_name")
                 )
             elif choice == "2":
-                liste = sorted(Tournoi.players_list, key=operator.attrgetter("rank"))
+                liste = sorted(
+                    Tournoi.players_list, key=operator.attrgetter("rank"), reverse=True
+                )
 
             for player in liste:
                 print(player)
