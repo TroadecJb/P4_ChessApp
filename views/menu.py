@@ -112,7 +112,10 @@ class Main_menu:
             choice = user_input.str_range_input(["0", "1", "2", "3", "4", "5"])
             if choice == "1":
                 new_turnament = tournoi_controller.create_turnament()
-                controller_db.save_turnament(new_turnament)
+                if new_turnament:
+                    controller_db.save_turnament(new_turnament)
+                else:
+                    pass
             elif choice == "2":
                 selected_turnament = controller_db.retrieve_turnament()
                 if selected_turnament:

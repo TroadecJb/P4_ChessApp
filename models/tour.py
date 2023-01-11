@@ -11,7 +11,14 @@ class Tour:
         self.end_time = ""
 
     def __repr__(self):
-        return f"\nTour {self.index}\nListe des matchs:\n{self.matchs_list}\ndébut: {self.start_time}\nfin: {self.end_time}"
+        message = (
+            f"\nTour {self.index}\n"
+            "Liste des matchs:\n"
+            f"{self.matchs_list}\n"
+            f"début: {self.start_time}\n"
+            f"fin: {self.end_time}\n"
+        )
+        return message
 
     def show_matchs(self):
         for match in self.matchs_list:

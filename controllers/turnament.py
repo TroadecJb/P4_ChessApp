@@ -31,7 +31,10 @@ class TournoiController:
             self.add_players(new_turnament)
             new_turnament.current_round = 0
             new_id = controller_db.get_doc_id(TOURNOI_TABLE)
-            new_turnament.doc_id = new_id[-1] + 1
+            if new_id:
+                new_turnament.doc_id = new_id[-1] + 1
+            else:
+                new_turnament.doc_id = 1
 
             return new_turnament
 
@@ -45,7 +48,6 @@ class TournoiController:
 
     def check_players_list_odd_even(self, Tournoi):
         """If the players list is empty, ask to add players. Check if players list is odd or even and if odd ask to add or remove one player."""
-        print("test check players", len(Tournoi.players_list))
         if len(Tournoi.players_list) > 0:
             if len(Tournoi.players_list) % 2 != 0:
                 prompt = (
@@ -184,6 +186,7 @@ class TournoiController:
         """
         Generate first round for the turnament, with paired players according to pairing system.
         """
+
         index = 1
         first_round = tour.Tour(index)
 
@@ -207,6 +210,7 @@ class TournoiController:
         Generate next round, if in range of turnament's number of round.
         Pairs according to pairing system (no pair redundancy).
         """
+
         index = len(Tournoi.rounds_list) + 1
         next_round = tour.Tour(index)
 
@@ -226,30 +230,68 @@ class TournoiController:
     def start_round(self, Tournoi):
         current_round = Tournoi.rounds_list[Tournoi.current_round]
         current_round.starting_time()
+        controller_db.update_turnament(Tournoi)
         print(current_round)
 
     def end_round(self, Tournoi):
-        current_round = Tournoi.rounds_list[Tournoi.current_round]
-        current_round.ending_time()
-        print(current_round)
+        prompt = "Terminer le tour ? (y/n)"
+        print(prompt)
+
+        choice = user_input.str_range_input(["y", "n"])
+        if choice == "y":
+            current_round = Tournoi.rounds_list[Tournoi.current_round]
+            current_round.ending_time()
+            print(current_round)
+
+            self.matchs_unfinished(Tournoi)
+            Tournoi.current_round += 1
+            controller_db.update_turnament(Tournoi)
+        else:
+            self.end_round(Tournoi)
+
+    def run_round(self, Tournoi):
+        if Tournoi.current_round == 0:
+            self.generate_first_round(Tournoi)
+        else:
+            self.generate_round(Tournoi)
+
+        self.start_round(Tournoi)
+        self.end_round(Tournoi)
+
+    def matchs_unfinished(self, Tournoi):
+        """Check if all matchs are finished in the last round, if not returns the unfinished matchs."""
+
+        last_round = Tournoi.rounds_list[-1]
+        unfinished_matchs = [m for m in last_round.matchs_list if m.finished == False]
+
+        if unfinished_matchs:
+            for m in unfinished_matchs:
+                m.set_result()
+        else:
+            pass
 
     def run_turnament(self, Tournoi):
         players_list_check = self.check_players_list_odd_even(Tournoi)
         if players_list_check:
             while Tournoi.current_round < Tournoi.number_of_rounds:
                 if Tournoi.current_round == 0:
-                    self.generate_first_round(Tournoi)
-                    self.start_round(Tournoi)
-                    controller_db.update_turnament(Tournoi)
-                    self.end_round(Tournoi)
-                    Tournoi.current_round += 1
-                    controller_db.update_turnament(Tournoi)
+                    # self.generate_first_round(Tournoi)
+                    self.run_round(Tournoi)
+                    # self.start_round(Tournoi)
+                    # controller_db.update_turnament(Tournoi)
+                    # self.end_round(Tournoi)
+                    # self.matchs_unfinished(Tournoi)
+                    # Tournoi.current_round += 1
+                    # controller_db.update_turnament(Tournoi)
                 else:
-                    self.generate_round(Tournoi)
-                    self.start_round(Tournoi)
-                    controller_db.update_turnament(Tournoi)
-                    self.end_round(Tournoi)
-                    Tournoi.current_round += 1
-                    controller_db.update_turnament(Tournoi)
+                    # self.matchs_unfinished(Tournoi)
+                    # self.generate_round(Tournoi)
+                    self.run_round(Tournoi)
+                    # self.start_round(Tournoi)
+                    # controller_db.update_turnament(Tournoi)
+                    # self.end_round(Tournoi)
+                    # self.matchs_unfinished(Tournoi)
+                    # Tournoi.current_round += 1
+                    # controller_db.update_turnament(Tournoi)
 
             print(f"Tous les tours du tournoi {Tournoi.name} ont eu lieu.")
