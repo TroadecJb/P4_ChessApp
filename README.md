@@ -4,7 +4,7 @@
  - Manage a database (players / turnaments) using TinyDB.
 
  The turnament pairing system is based on the Swiss System.
- ---
+
 # Environment
 ## To use this script in an virtual environment:
  
@@ -28,11 +28,11 @@ packages installation
 
 *for further details, [click here](https://docs.python.org/fr/3/library/venv.html#venv-def)*
 
----
+
 # Requirements
 tinydb==4.7.0
 
----
+
 # Instructions
  On start the program will show you basic command and instructions
 ```
