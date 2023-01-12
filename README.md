@@ -16,7 +16,7 @@ $ python -m -venv <environment name>
 
 activation windows  
 `$ ~env\Scripts\activate.bat`  
-activation macos/linux
+activation macos/linux 
 `$ ~source env/bin/activate`
 
 packages installation  
@@ -26,15 +26,13 @@ packages installation
 - Install Python >=3.10.6
 - From terminal `python -m pip install -r requirements.txt`
 
-*for further details, [click here](https://docs.python.org/fr/3/library/venv.html#venv-def)*
-
 
 # Requirements
 tinydb==4.7.0
 
 
 # Instructions
- On start the program will show you basic command and instructions
+ At the start, the program will show you basic commands and instructions
 ```
 /// Naviguer en entrant le numéro du menu ou des choix proposés.
 /// Pour valider votre choix appuyer sur 'Entrée'.
@@ -43,6 +41,6 @@ tinydb==4.7.0
 /// Pour afficher l'aide entrez: 'aide'.
 ```
 
- Closing the program between two actions (adding a player to database, running a turnament's round) will not loose informations.
+ Closing the program between two actions (adding a player to the database, running a turnament's round) will not loose informations.
  
  
