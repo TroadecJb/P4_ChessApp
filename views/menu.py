@@ -82,7 +82,7 @@ class Main_menu:
                         print(f"\nNom du joueur: {player_to_modify.last_name}")
                         player_to_modify.set_last_name()
                     elif choice == "2":
-                        print(f"\Prénom du joueur: {player_to_modify.first_name}")
+                        print(f"\nPrénom du joueur: {player_to_modify.first_name}")
                         player_to_modify.set_first_name()
                     elif choice == "3":
                         print(f"\nDate de naissance du joueur: {player_to_modify.birth_date}")

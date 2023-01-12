@@ -1,5 +1,5 @@
 from views.user_input import UserChoice
-from controllers.turnament import TournoiController()
+from controllers.turnament import TournoiController
 
 CHESS_TIME_MODE = ["", "bullet", "blitz", "coup rapide"]
 
@@ -24,10 +24,20 @@ class Tournoi:
         self.description = ""
 
     def __str__(self):
-        return f"\n{self.name} a lieu à {self.place}, le {self.date}.\nLes participants sont {self.players_list}.\nC'est en tournoi en {self.number_of_rounds} tour(s) avec un contrôle de temps {self.time_mode}."
+        message = (
+            f"\n{self.name} a lieu à {self.place}, le {self.date}."
+            f"\nLes participants sont {self.players_list}."
+            f"\nC'est en tournoi en {self.number_of_rounds} tour(s) avec un contrôle de temps {self.time_mode}."
+        )
+        return message
 
     def __repr__(self):
-        return f"\nTournoi(nom={self.name}, lieu={self.place}, date={self.date}, nombre_de_tour={self.number_of_rounds}, mode={self.time_mode}, participants={self.players_list}."
+        message = (
+            f"\nTournoi(nom={self.name}, lieu={self.place}, date={self.date}"
+            f"\nnombre_de_tour={self.number_of_rounds}, mode={self.time_mode}"
+            f"\nparticipants={self.players_list}."
+        )
+        return message
 
     def set_name(self):
         """Set Tounoi's name."""

@@ -19,7 +19,10 @@ class Rapport:
         if players_list:
             print("\nListe des joueurs :\n")
             for player in JOUEUR_TABLE:
-                readable = f'{player["last_name"].capitalize()} {player["first_name"].capitalize()}, classement: {player["rank"]}'
+                readable = (
+                    f'{player["last_name"].capitalize()} {player["first_name"].capitalize()}'
+                    f'classement: {player["rank"]}'
+                )
                 print(readable, sep="\n")
         else:
             print("Aucun joueur dans la base donnée.")
@@ -57,7 +60,10 @@ class Rapport:
             prompt = "\nListe des tournois:"
             print(prompt)
             for turnament in turnament_data:
-                readable = f'{turnament["name"]}, {turnament["date"]}, {turnament["place"]}.\ndescription: {turnament["description"]}\n'
+                readable = (
+                    f'{turnament["name"]}, {turnament["date"]}, {turnament["place"]}'
+                    f'\ndescription: {turnament["description"]}\n'
+                )
                 print(readable, sep="\n")
         else:
             message = "Aucun tournoi dans la base de donnée."

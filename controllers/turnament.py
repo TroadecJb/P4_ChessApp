@@ -99,7 +99,10 @@ class TournoiController:
                     print(player.doc_id, player["last_name"], player["first_name"])
 
                 while adding_player:
-                    prompt = "\nEntrez l'index des joueurs participant au tournoi (pour arrêter n'entrez aucun index et validez):"
+                    prompt = (
+                        "\nEntrez l'index des joueurs participant au tournoi"
+                        "(pour arrêter n'entrez aucun index et validez):"
+                    )
                     print(prompt)
                     selection = user_input.int_range_input(players_ids)
 
@@ -175,7 +178,10 @@ class TournoiController:
 
         removing_player = True
         while removing_player:
-            prompt = "\nEntrez l'index des joueurs que vous souhaitez retirer du tournoi (pour arrêtez n'entrez aucun index et validez):"
+            prompt = (
+                "\nEntrez l'index des joueurs que vous souhaitez retirer du tournoi"
+                "(pour arrêtez n'entrez aucun index et validez):"
+            )
             print(prompt)
             players_ids = [player.doc_id for player in Tournoi.players_list]
             selection = user_input.int_range_input(players_ids)
