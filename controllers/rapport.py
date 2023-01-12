@@ -10,7 +10,11 @@ user_input = UserChoice()
 
 
 class Rapport:
+    """Class that generates reports to show user several types of informations."""
+
     def show_all_players(self):
+        """Print informations of every players in database table."""
+
         players_list = JOUEUR_TABLE.all()
         if players_list:
             print("\nListe des joueurs :\n")
@@ -22,6 +26,8 @@ class Rapport:
             pass
 
     def show_turnament_players(self, Tournoi):
+        """Print informations of every players in a turnament."""
+
         if len(Tournoi.players_list) > 0:
             prompt = "Sélectionner le rangement  1- alphabétique | 2- classement\n"
             print(prompt)
@@ -44,6 +50,8 @@ class Rapport:
             print(message)
 
     def show_all_turnaments(self):
+        """Print informations of every turnament in database tournoi."""
+
         turnament_data = TOURNOI_TABLE.all()
         if turnament_data:
             prompt = "\nListe des tournois:"
@@ -57,6 +65,8 @@ class Rapport:
             pass
 
     def show_turnament_rounds(self, Tournoi):
+        """Print informations of every rounds in a turnament."""
+
         if len(Tournoi.rounds_list) > 0:
             rounds_list = [r for r in Tournoi.rounds_list]
             for r in rounds_list:
@@ -66,6 +76,8 @@ class Rapport:
             print(message)
 
     def show_turnament_matchs(self, Tournoi):
+        """Print informations of every matchs in a turnament."""
+
         if len(Tournoi.rounds_list) > 0:
             rounds_list = [r for r in Tournoi.rounds_list]
             for r in rounds_list:

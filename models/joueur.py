@@ -40,6 +40,8 @@ class Joueur:
         self.points = 0
 
     def serialize(self):
+        """Serialize Joueur informations."""
+
         serialized = {
             "doc_id": self.doc_id,
             "first_name": self.first_name,
@@ -52,6 +54,8 @@ class Joueur:
         return serialized
 
     def deserialize(self, player_db):
+        """Deserialize Jouer informations."""
+
         self.doc_id = player_db.doc_id
         self.first_name = player_db["first_name"]
         self.last_name = player_db["last_name"]
@@ -60,6 +64,8 @@ class Joueur:
         self.points = float(player_db["points"])
 
     def update_info(self):
+        """Allow user to redo every informations of a Joueur."""
+
         self.set_first_name()
         self.set_last_name()
         self.set_birth_date()
@@ -67,30 +73,40 @@ class Joueur:
         self.set_points()
 
     def set_first_name(self):
+        """Set the first name of Joueur."""
+
         prompt = "\nEntrez le prénom du joueur:"
         print(prompt)
         player_fisrt_name = user_input.user_input()
         self.first_name = player_fisrt_name
 
     def set_last_name(self):
+        """Set the last name of Joueur."""
+
         prompt = "\nEntrez le nom du joueur :"
         print(prompt)
         player_last_name = user_input.user_input()
         self.last_name = player_last_name
 
     def set_birth_date(self):
+        """Set the birth date of Joueur."""
+
         prompt = "\nEntrez la date de naissance du joueur (dd/mm/yyyy):"
         print(prompt)
         player_birth_date = user_input.user_input()
         self.birth_date = player_birth_date
 
     def set_rank(self):
+        """Set the rank of Joueur."""
+
         prompt = "\nEntrez le classement du joueur :"
         print(prompt)
         player_rank = user_input.int_input()
         self.rank = player_rank
 
     def set_points(self):
+        """Set the points of Joueur."""
+
         prompt = "\nEntrez les points du joueur:"
         print(prompt)
         player_points = user_input.float_input()

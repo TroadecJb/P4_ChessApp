@@ -2,6 +2,8 @@ import operator
 
 
 class SwissSystem:
+    """Class for the Swiss pairing system."""
+
     def generate_inital_pairs(self, players_list):
         """
         Pair the players by their rank: top-half[i] with bottom-half[i].

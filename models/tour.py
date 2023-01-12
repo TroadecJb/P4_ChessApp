@@ -25,10 +25,13 @@ class Tour:
             match.__repr__()
 
     def starting_time(self):
+        """Record the date and time at the beginning of the round."""
+
         date_time = datetime.now()
         self.start_time = date_time.strftime("%d/%m/%Y, %H:%M:%S")
 
     def ending_time(self):
+        """Record the date and time at the end of the round."""
         date_time = datetime.now()
 
         self.end_time = date_time.strftime("%d/%m/%Y, %H:%M:%S")
@@ -36,6 +39,8 @@ class Tour:
             match.set_result()
 
     def serialize(self):
+        """Serialize informations of Tour."""
+
         matchs_list = []
         for match in self.matchs_list:
             x = match.serialize()
@@ -50,6 +55,8 @@ class Tour:
         return serialized
 
     def deserialize(self, data):
+        """Deserialize informations of Tour."""
+
         self.matchs_list = data["matchs_list"]
         self.start_time = data["start_time"]
         self.end_time = data["end_time"]

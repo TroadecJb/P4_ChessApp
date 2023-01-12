@@ -1,6 +1,6 @@
-from views.database import DbViewer
+from P4_ChessApp.views.database_viewer import DbViewer
 from views.user_input import UserChoice
-from controllers.database import DbController
+from controllers.database_controller import DbController
 from controllers.turnament import TournoiController
 from controllers.rapport import Rapport
 
@@ -12,11 +12,15 @@ user_input = UserChoice()
 
 
 class Main_menu:
+    """Class to execute menu of program."""
+
     def __init__(self):
         self.active = True
         user_input.user_help()
 
     def program_selection(self):
+        """Main menu method."""
+
         while self.active:
             prompt = (
                 "\n- - - Menu Principal - - -\n"
@@ -39,6 +43,8 @@ class Main_menu:
                 self.program_selection()
 
     def players_program(self):
+        """Players programm menu."""
+
         while self.active:
             prompt = (
                 "\n- - - Menu Principal / Gestion des joueurs - - -\n"
@@ -73,20 +79,33 @@ class Main_menu:
                     print(prompt)
                     choice = user_input.str_range_input(["1", "2", "3", "4", "5", "6"])
                     if choice == "1":
+                        print(f"\nNom du joueur: {player_to_modify.last_name}")
                         player_to_modify.set_last_name()
                     elif choice == "2":
+                        print(f"\Prénom du joueur: {player_to_modify.first_name}")
                         player_to_modify.set_first_name()
                     elif choice == "3":
+                        print(f"\nDate de naissance du joueur: {player_to_modify.birth_date}")
                         player_to_modify.set_birth_date()
                     elif choice == "4":
+                        print(f"\nClassement du joueur: {player_to_modify.rank}")
                         player_to_modify.set_rank()
                     elif choice == "5":
+                        print(f"\nPoints du joueur: {player_to_modify.points}")
                         player_to_modify.set_points()
                     elif choice == "6":
+                        print(
+                            f"\nInformations actuelles:"
+                            f"\n{player_to_modify.last_name} {player_to_modify.first_name}"
+                            f"\n{player_to_modify.birth_date}"
+                            f"\nclassement: {player_to_modify.rank}, points: {player_to_modify.points}"
+                        )
                         player_to_modify.update_info()
                     else:
                         pass
+
                     controller_db.update_player_in_db(player_to_modify)
+
                 else:
                     pass
 
@@ -97,9 +116,9 @@ class Main_menu:
                 self.program_selection()
 
     def turnament_program(self):
-        """Création d'un nouveau tournoi, exécution d'un tournoi existant, ajout d'une description à propos d'un tournoi."""
+        """Création d'un nouveau tournoi, exécution d'un tournoi existant, ajout d'une description."""
+
         while self.active:
-            # modifier le menu tournoi pour avoir: création tournoi, lancer tournoi, modifier tournoi, supprimer tournoi
             prompt = (
                 "\n- - - Menu Principal / Gestion des tournois - - -\n"
                 "\t0 - Retour au menu principal\n"
@@ -117,6 +136,7 @@ class Main_menu:
                     controller_db.save_turnament(new_turnament)
                 else:
                     pass
+
             elif choice == "2":
                 selected_turnament = controller_db.retrieve_turnament()
                 if selected_turnament:
@@ -127,6 +147,7 @@ class Main_menu:
                     tournoi_controller.run_turnament(selected_turnament)
                 else:
                     pass
+
             elif choice == "3":
                 selected_turnament = controller_db.retrieve_turnament()
                 if selected_turnament:
@@ -135,7 +156,10 @@ class Main_menu:
                     )
                     selected_turnament.add_description()
                     controller_db.update_turnament(selected_turnament)
-            elif choice == "4":
+                else:
+                    pass
+
+            elif choice == "4":  # submenu to choose which types of information
                 turnament_to_modify = controller_db.retrieve_turnament()
                 if turnament_to_modify:
                     turnament_to_modify = controller_db.deserialize_turnament(
@@ -163,10 +187,10 @@ class Main_menu:
                     elif choice == "3":
                         turnament_to_modify.set_place()
                     elif choice == "4":
-                        turnament_to_modify.set_time_mode()
+                        turnament_to_modify.set_time_control()
                     elif choice == "5":
                         turnament_to_modify.set_number_rounds()
-                    elif choice == "6":
+                    elif choice == "6":   # submenu to choose which types of information
                         prompt = (
                             "\nModification de la liste des joueurs\n"
                             "\t1 - Ajouter des joueurs\n"
@@ -184,12 +208,13 @@ class Main_menu:
                     controller_db.update_turnament(turnament_to_modify)
 
             elif choice == "5":
-                controller_db.remove_turnamentin_db()
+                controller_db.remove_turnament_in_db()
             elif choice == "0":
                 self.program_selection()
 
     def report_program(self):
         """Affiche différentes informations concernant la base de données (Joueurs, Tournois, Tours, Matchs)"""
+
         while self.active:
             prompt = print(
                 "\n- - - Menu Principal / Rapports - - -\n"
@@ -206,7 +231,7 @@ class Main_menu:
             elif choice == "2":
                 rapport.show_all_turnaments()
 
-            elif choice == "3":
+            elif choice == "3":  # submenu to choose which types of information
                 selected_turnament = controller_db.retrieve_turnament()
                 if selected_turnament:
                     selected_turnament = controller_db.deserialize_turnament(

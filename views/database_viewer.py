@@ -1,8 +1,6 @@
 from views.user_input import UserChoice
-from controllers.database import DbController
 
 user_input = UserChoice()
-db_controller = DbController()
 
 
 class DbViewer:

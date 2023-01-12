@@ -26,6 +26,8 @@ class Match:
         return message
 
     def serialize(self):
+        """Serialize Matchs informations."""
+
         serialized = {
             "index": self.index,
             "player_1": self.player_1.doc_id,
@@ -36,7 +38,9 @@ class Match:
 
         return serialized
 
-    def deserialize(self, data):  # chelou
+    def deserialize(self, data):
+        """Deserialize Matchs informations."""
+
         self.index = data["index"]
         self.players_list = data["players_list"]
         self.player_1 = data["player_1"]
@@ -45,6 +49,8 @@ class Match:
         self.match_result = data["match_result"]
 
     def set_result(self):
+        """Ask user the match's result."""
+
         prompt = f"\nIndiquer le résultat pour le match {self.index} ? (y/n)"
         print(prompt)
         choice = user_input.str_range_input(["y", "n"])

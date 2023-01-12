@@ -13,12 +13,15 @@ class DbController:
     """exchange between DB and program"""
 
     def get_doc_id(self, table):
+        """Return a list of all doc_id of a table"""
+
         table_data = table.all()
         ids = [item.doc_id for item in table_data]
         return ids
 
     def get_all_turnaments(self):
         """Return a list of every turnament in the table"""
+
         turnaments_data = TOURNOI_TABLE.all()
         liste = [turnament for turnament in turnaments_data]
 
@@ -26,10 +29,12 @@ class DbController:
 
     def add_players_to_db(self, players_data):
         """Add to players_data to the table JOUEUR_TABLE"""
+
         JOUEUR_TABLE.insert_multiple(players_data)
 
     def get_one_player_from_db(self):
         """Retrieve one player from database, based on user selection."""
+
         players_ids = self.get_doc_id(JOUEUR_TABLE)
         if players_ids:
             prompt = "Entrez l'index du joueur que vous souhaitez modifier :\n"
@@ -51,12 +56,16 @@ class DbController:
 
     def get_multiple_players_from_db(self):
         """Retrieve multiple players from database, based on user selection, returns the list of class Joueur"""
+
         players_ids = self.get_doc_id(JOUEUR_TABLE)
         players_list = []
         index_players = []
         adding_player = True
 
-        prompt = "Entrez l'index des joueurs que vous souhaitez modifier :\n(pour arrêter n'entrez aucun index et validez]\n"
+        prompt = (
+            "Entrez l'index des joueurs que vous souhaitez modifier :\n"
+            "(pour arrêter n'entrez aucun index et validez]\n"
+        )
         print(prompt)
 
         for player in JOUEUR_TABLE:
@@ -79,6 +88,7 @@ class DbController:
 
     def retrieve_turnament(self):
         """Returns serialized turnament from table."""
+
         selected_turnament = ""
         turnament_data = TOURNOI_TABLE.all()
 
@@ -109,7 +119,8 @@ class DbController:
             return None
 
     def deserialize_turnament(self, turnament_serialized):
-        """Deserializes turnament, deserializes every players, rounds and matchs."""
+        """Deserializes turnament, players, rounds and matchs."""
+
         turnament = tournoi.Tournoi()
 
         turnament.name = turnament_serialized["name"]
@@ -166,11 +177,13 @@ class DbController:
 
     def save_turnament(self, Tournoi):
         """From class object to serialize attr, stored in table."""
+
         serialized = Tournoi.serialize()
         TOURNOI_TABLE.insert(serialized)
 
     def save_player(self, player):
         """From class object to serialize attr, stored in table."""
+
         if type(player) == list:
             for i in player:
                 serialized = i.serialize()
@@ -181,15 +194,19 @@ class DbController:
 
     def update_player_in_db(self, x):
         """Update JOUEUR_TABLE with serialized player's data, based on doc_id."""
+
         serialized = x.serialize()
         JOUEUR_TABLE.update(serialized, doc_ids=[x.doc_id])
 
     def update_turnament(self, Tournoi):
         """Update TOURNOI_TABLE with serialized turnament's data, based on doc_id."""
+
         serialized = Tournoi.serialize()
         TOURNOI_TABLE.update(serialized, doc_ids=[Tournoi.doc_id])
 
     def remove_player_in_db(self):
+        """Remove one player from table in database"""
+
         players_list = JOUEUR_TABLE.all()
 
         if players_list:
@@ -214,7 +231,9 @@ class DbController:
             print("Aucun joueur dans la base de données.")
             pass
 
-    def remove_turnamentin_db(self):
+    def remove_turnament_in_db(self):
+        """Remove one turnament from table in database"""
+
         turnaments_list = TOURNOI_TABLE.all()
 
         if turnaments_list:

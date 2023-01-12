@@ -1,8 +1,10 @@
 from views.user_input import UserChoice
+from controllers.turnament import TournoiController()
 
 CHESS_TIME_MODE = ["", "bullet", "blitz", "coup rapide"]
 
 user_input = UserChoice()
+tournoi_controller = TournoiController()
 
 
 class Tournoi:
@@ -28,6 +30,8 @@ class Tournoi:
         return f"\nTournoi(nom={self.name}, lieu={self.place}, date={self.date}, nombre_de_tour={self.number_of_rounds}, mode={self.time_mode}, participants={self.players_list}."
 
     def set_name(self):
+        """Set Tounoi's name."""
+
         prompt = "\nEntrez le nom du tournoi :"
         print(prompt)
         turnament_name = user_input.user_input()
@@ -35,18 +39,24 @@ class Tournoi:
         self.name = turnament_name
 
     def set_date(self):
+        """Set Tournoi's date."""
+
         prompt = "\nEntrez la date du tournoi (dd/mm/yyyy):"
         print(prompt)
         turnament_date = user_input.user_input()
         self.date = turnament_date
 
     def set_place(self):
+        """Set Tournoi's place."""
+
         prompt = "\nEntrez le lieu du tournoi :"
         print(prompt)
         turnament_place = user_input.user_input()
         self.place = turnament_place
 
-    def set_time_mode(self):
+    def set_time_control(self):
+        """Set Tournoi's time control."""
+
         prompt = (
             "\nSélectionner le mode de Contrôle du temps :\n"
             "\t1 - Bullet\n"
@@ -59,6 +69,8 @@ class Tournoi:
         self.time_mode = CHESS_TIME_MODE[choice]
 
     def set_number_rounds(self):
+        """Set Tournoi's number of rounds(Tour)."""
+
         prompt = (
             "\nLe nombre de tour par défaut est de 4, voulez-vous le modifier ? (y/n)"
         )
@@ -73,16 +85,13 @@ class Tournoi:
             self.number_of_rounds = 4
 
     def add_players(self, selected_player):
+        """Add a list to Tournoi's players list."""
+
         self.players_list.append(selected_player)
 
-    def redo_players(self, selec_player):
-        self.players_list = []
-        self.players_list = ""
-
-    def remove_players(self):
-        pass
-
     def add_description(self):
+        """Set Tournoi's description."""
+
         prompt = "\nVoulez-vous ajouter une description ? (y/n)"
         print(prompt)
         choice = user_input.user_input()
@@ -95,6 +104,8 @@ class Tournoi:
             pass
 
     def serialize(self):
+        """Serialize Tounroi information."""
+
         players_list = []
         if self.players_list:
             for player in self.players_list:
@@ -123,10 +134,13 @@ class Tournoi:
         return serialized
 
     def update_info(self):
+        """Allow user to update/change every information of Tournoi"""
+
+        self.__repr__()
         self.set_name()
         self.set_date()
         self.set_place()
-        self.set_time_mode()
+        self.set_time_control()
         self.set_number_rounds()
-        self.redo_players()
+        tournoi_controller.redo_players_list(self)
         self.add_description()

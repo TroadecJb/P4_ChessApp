@@ -1,7 +1,7 @@
 from tinydb import TinyDB
 from models import tournoi, tour, match, joueur
 from controllers import pairing_system
-from controllers.database import DbController
+from controllers.database_controller import DbController
 from views.user_input import UserChoice
 
 DB = TinyDB("db.json")
@@ -13,10 +13,14 @@ user_input = UserChoice()
 
 
 class TournoiController:
+    """Class to control a turnament and execute it."""
+
     def __init__(self):
         self.pair_system = pairing_system.SwissSystem()
 
     def create_turnament(self):
+        """Asks user informations to create a new turnament."""
+
         prompt = "\nSouhaitez vous créer un nouveau tournoi ? (y/n)"
         print(prompt)
         choice = user_input.str_range_input(["y", "n"])
@@ -27,7 +31,7 @@ class TournoiController:
             new_turnament.set_date()
             new_turnament.set_place()
             new_turnament.set_number_rounds()
-            new_turnament.set_time_mode()
+            new_turnament.set_time_control()
             self.add_players(new_turnament)
             new_turnament.current_round = 0
             new_id = controller_db.get_doc_id(TOURNOI_TABLE)
@@ -42,12 +46,17 @@ class TournoiController:
             pass
 
     def show_players_list(self, Tournoi):
+        """Print every players in the turnament's players list."""
+
         print("\nListe des joueurs :")
         for player in Tournoi.players_list:
             print("\t", player)
 
     def check_players_list_odd_even(self, Tournoi):
-        """If the players list is empty, ask to add players. Check if players list is odd or even and if odd ask to add or remove one player."""
+        """If the players list is empty, ask to add players.
+        Check if players list is odd or even and if odd ask to add or remove one player.
+        """
+
         if len(Tournoi.players_list) > 0:
             if len(Tournoi.players_list) % 2 != 0:
                 prompt = (
@@ -74,6 +83,7 @@ class TournoiController:
 
     def add_players(self, Tournoi):
         """Takes user selection and retrieve players from the db and adds it to the turnament players list."""
+
         selected_player = []
         players_list = []
         adding_player = True
@@ -116,6 +126,7 @@ class TournoiController:
 
     def add_one_player(self, Tournoi):
         """Takes user selection and retrieve player from the db and adds it to the turnament players list."""
+
         self.show_players_list(Tournoi)
         prompt = (
             "\nSélectionner l'index du joueur que vous souhaitez ajouter au tournoi:"
@@ -134,12 +145,14 @@ class TournoiController:
 
     def redo_players_list(self, Tournoi):
         """Empty the playes list and allows user to add players to it."""
+
         Tournoi.players_list = []
         print("\n Tous les joueurs ont été de la liste.")
         self.add_players()
 
     def remove_one_player(self, Tournoi):
         """Remove one player from the turnament players list."""
+
         self.show_players_list(Tournoi)
 
         prompt = (
@@ -158,6 +171,8 @@ class TournoiController:
         Tournoi.players_list.remove(player_to_remove[0])
 
     def remove_players(self, Tournoi):
+        """Takes user selection and remove players from the turnament players list."""
+
         removing_player = True
         while removing_player:
             prompt = "\nEntrez l'index des joueurs que vous souhaitez retirer du tournoi (pour arrêtez n'entrez aucun index et validez):"
@@ -177,14 +192,15 @@ class TournoiController:
                 removing_player = False
 
     def modify_players_list(self, Tournoi, choice):
+        """Asks user to choose between add or remove player."""
+
         if choice == 1:
             self.add_players(Tournoi)
         elif choice == 2:
             self.remove_players(Tournoi)
 
     def generate_first_round(self, Tournoi):
-        """
-        Generate first round for the turnament, with paired players according to pairing system.
+        """Generate first round for the turnament, with paired players according to pairing system.
         """
 
         index = 1
@@ -206,8 +222,7 @@ class TournoiController:
         Tournoi.rounds_list.append(first_round)
 
     def generate_round(self, Tournoi):
-        """
-        Generate next round, if in range of turnament's number of round.
+        """Generate next round, if in range of turnament's number of round.
         Pairs according to pairing system (no pair redundancy).
         """
 
@@ -228,12 +243,16 @@ class TournoiController:
         Tournoi.rounds_list.append(next_round)
 
     def start_round(self, Tournoi):
+        """Start current round: pairing system, record starting time and update database."""
+
         current_round = Tournoi.rounds_list[Tournoi.current_round]
         current_round.starting_time()
         controller_db.update_turnament(Tournoi)
         print(current_round)
 
     def end_round(self, Tournoi):
+        """End current round: matchs result, record ending time and update database."""
+
         prompt = "Terminer le tour ? (y/n)"
         print(prompt)
 
@@ -250,6 +269,8 @@ class TournoiController:
             self.end_round(Tournoi)
 
     def run_round(self, Tournoi):
+        """Execute current round, start to end with verification if it's first round."""
+
         if Tournoi.current_round == 0:
             self.generate_first_round(Tournoi)
         else:
@@ -271,6 +292,8 @@ class TournoiController:
             pass
 
     def run_turnament(self, Tournoi):
+        """Execute turnament process checking if all rounds are done."""
+
         players_list_check = self.check_players_list_odd_even(Tournoi)
         if players_list_check:
             while Tournoi.current_round < Tournoi.number_of_rounds:
