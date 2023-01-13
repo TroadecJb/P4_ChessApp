@@ -1,10 +1,8 @@
 from views.user_input import UserChoice
-from controllers.turnament import TournoiController
 
 CHESS_TIME_MODE = ["", "bullet", "blitz", "coup rapide"]
 
 user_input = UserChoice()
-tournoi_controller = TournoiController()
 
 
 class Tournoi:
@@ -152,5 +150,4 @@ class Tournoi:
         self.set_place()
         self.set_time_control()
         self.set_number_rounds()
-        tournoi_controller.redo_players_list(self)
         self.add_description()

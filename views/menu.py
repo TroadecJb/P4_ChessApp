@@ -1,4 +1,4 @@
-from P4_ChessApp.views.database_viewer import DbViewer
+from views.database_viewer import DbViewer
 from views.user_input import UserChoice
 from controllers.database_controller import DbController
 from controllers.turnament import TournoiController
@@ -205,6 +205,8 @@ class Main_menu:
                         turnament_to_modify.add_description()
                     elif choice == "8":
                         turnament_to_modify.update_info()
+                        turnament_to_modify.players_list = []
+                        tournoi_controller.add_players(turnament_to_modify)
                     controller_db.update_turnament(turnament_to_modify)
 
             elif choice == "5":
