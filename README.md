@@ -25,6 +25,11 @@ packages installation
 ## To use this script without an virtual environment:
 - Install Python >=3.10.6
 - From terminal `python -m pip install -r requirements.txt`
+- To run the program 
+```
+$ cd /path/to/folder/P4_ChessApp-main
+$ python -m main
+```
 
 
 # Requirements
