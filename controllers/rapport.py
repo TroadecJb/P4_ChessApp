@@ -17,13 +17,27 @@ class Rapport:
 
         players_list = JOUEUR_TABLE.all()
         if players_list:
-            print("\nListe des joueurs :\n")
-            for player in JOUEUR_TABLE:
-                readable = (
-                    f'{player["last_name"].capitalize()} {player["first_name"].capitalize()}'
-                    f'classement: {player["rank"]}'
+            prompt = "Sélectionner le rangement  1- alphabétique | 2- classement\n"
+            print(prompt)
+            
+            choice = user_input.str_range_input(["1", "2"])
+            if choice == "1":
+                liste = sorted(
+                    players_list, key=operator.itemgetter("last_name")
                 )
-                print(readable, sep="\n")
+            elif choice == "2":
+                liste = sorted(
+                    players_list, key=operator.itemgetter("rank"), reverse=True
+                )
+            
+            message = (
+                "\nListe des joueurs :\n"
+                "Nom / Prénom / Classement\n"
+            )
+            print(message)
+            for player in liste:
+                print(f'{player["last_name"]} {player["first_name"]}, {player["rank"]}')
+
         else:
             print("Aucun joueur dans la base donnée.")
             pass
@@ -87,7 +101,8 @@ class Rapport:
         if len(Tournoi.rounds_list) > 0:
             rounds_list = [r for r in Tournoi.rounds_list]
             for r in rounds_list:
-                print(r.matchs_list)
+                for m in r.matchs_list:
+                    print(m)
         else:
             message = "Ce tournoi ne semble pas encore avoir eu lieu et ne possède pas de match"
             print(message)
