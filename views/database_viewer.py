@@ -25,11 +25,15 @@ class DbViewer:
             prompt = "\nIndiquez le classement :"
             print(prompt)
             rank = user_input.int_input()
+            if rank == None:
+                rank = 0
+            else:
+                pass
 
             new_player = {
-                "first_name": first_name,
-                "last_name": last_name,
-                "birth_date": birth_date,
+                "first_name": str(first_name),
+                "last_name": str(last_name),
+                "birth_date": str(birth_date),
                 "rank": rank,
                 "points": 0,
             }

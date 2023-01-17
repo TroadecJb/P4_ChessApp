@@ -26,7 +26,7 @@ class UserChoice:
             elif choice.lower() == "aide":
                 self.user_help()
             else:
-                return choice.lower()
+                return choice.lower().strip()
         else:
             pass
 
