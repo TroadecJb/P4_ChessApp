@@ -28,7 +28,7 @@ packages installation
 - To run the program 
 ```
 $ cd /path/to/folder/P4_ChessApp-main
-$ python -m main
+$ python -m main.py
 ```
 
 
