@@ -19,11 +19,11 @@ class UserChoice:
     def user_input(self):
         choice = input()
         if len(choice) > 0:
-            if choice.lower() == "quitter":
+            if choice.lower().strip() == "quitter":
                 quit()
-            elif choice.lower() == "annuler":
+            elif choice.lower().strip() == "annuler":
                 pass
-            elif choice.lower() == "aide":
+            elif choice.lower().strip() == "aide":
                 self.user_help()
             else:
                 return choice.lower().strip()
