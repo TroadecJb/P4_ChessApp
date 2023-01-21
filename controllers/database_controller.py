@@ -41,7 +41,7 @@ class DbController:
             print(prompt)
 
             for player in JOUEUR_TABLE:
-                print(f"\t{player.doc_id} -", player["last_name"], player["first_name"])
+                print(f"\t{player.doc_id} -", player["last_name"], player["first_name"], player["birth_date"])
 
             choice = user_input.int_range_input(players_ids)
 
@@ -110,7 +110,7 @@ class DbController:
                 selected_turnament = TOURNOI_TABLE.get(doc_id=choice)
                 return selected_turnament
             else:
-                message = "Aucun tounroi sélectionné."
+                message = "Aucun tournoi sélectionné."
                 print(message)
                 return
         else:

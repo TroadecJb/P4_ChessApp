@@ -16,7 +16,7 @@ $ python -m -venv <environment name>
 
 activation windows  
 `$ ~env\Scripts\activate.bat`  
-activation macos/linux 
+activation macos/linux  
 `$ ~source env/bin/activate`
 
 packages installation  
